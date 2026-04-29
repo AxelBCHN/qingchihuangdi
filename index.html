@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>天子 — Fils du Ciel</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&display=swap');
+:root{--gold:#c9a84c;--gdl:#e8d08a;--gdd:#8b6914;--crim:#8b1a1a;--crml:#c0392b;--ink:#1a0f0a;--pch:#f4e8c1;--pchd:#e8d4a0;--jade:#2d6a4f;--jadl:#52b788;--smk:#8b7355;--pur:#6c3483;--purl:#9b59b6;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--ink);font-family:'IM Fell English',serif;color:var(--pch);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#0a0603;}::-webkit-scrollbar-thumb{background:#3a2010;border-radius:2px;}
+/* SPLASH */
+#splash{position:fixed;inset:0;background:radial-gradient(ellipse at center,#1a0505,#050000);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;transition:opacity 1s;}
+.spcn{font-size:5rem;color:var(--crim);text-shadow:0 0 40px #8b1a1a88;margin-bottom:.8rem;letter-spacing:.5em;}
+#splash h1{font-family:'Cinzel Decorative',serif;font-size:clamp(1.8rem,4vw,3.5rem);color:var(--gold);letter-spacing:.2em;animation:glow 3s ease-in-out infinite;}
+@keyframes glow{0%,100%{text-shadow:0 0 30px #c9a84c88;}50%{text-shadow:0 0 70px #c9a84cdd;}}
+.spsub{font-size:1rem;color:var(--pchd);margin:.7rem 0 1.5rem;font-style:italic;opacity:.8;}
+.spbtn{background:var(--crim);color:var(--gold);border:2px solid var(--gdd);font-family:'Cinzel',serif;font-size:1rem;padding:.8rem 2.6rem;cursor:pointer;letter-spacing:.15em;text-transform:uppercase;transition:all .3s;}
+.spbtn:hover{background:var(--crml);box-shadow:0 0 25px var(--gdd);transform:scale(1.03);}
+.spfl{margin-top:1.2rem;font-style:italic;color:var(--smk);font-size:.82rem;max-width:500px;text-align:center;line-height:1.9;}
+/* LAYOUT */
+#game{display:none;background:#0d0906;min-height:100vh;}
+#topbar{background:linear-gradient(180deg,#1c0a05,#120805);border-bottom:2px solid var(--gdd);padding:.45rem 1rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;position:sticky;top:0;z-index:200;}
+.ettl{font-family:'Cinzel Decorative',serif;color:var(--gold);font-size:.8rem;margin-right:.4rem;white-space:nowrap;}
+.chip{display:flex;align-items:center;gap:.3rem;background:rgba(0,0,0,.55);border:1px solid var(--gdd);border-radius:2px;padding:.22rem .55rem;font-size:.75rem;white-space:nowrap;}
+.chip .cv{font-weight:bold;color:var(--gdl);}.chip .cl{color:var(--smk);font-size:.64rem;}
+.chip.dng .cv{color:#e74c3c;}.chip.wrn .cv{color:#f39c12;}.chip.gd .cv{color:var(--jadl);}
+#yr{margin-left:auto;font-family:'Cinzel',serif;color:var(--gdl);font-size:.8rem;white-space:nowrap;}
+#tbtn{background:var(--crim);color:var(--gold);border:1px solid var(--gdd);font-family:'Cinzel',serif;font-size:.72rem;padding:.28rem .9rem;cursor:pointer;letter-spacing:.08em;transition:all .3s;}
+#tbtn:hover{background:var(--crml);}
+#main{display:grid;grid-template-columns:240px 1fr 260px;min-height:calc(100vh - 48px);}
+#lp,#rp{background:#0c0704;overflow-y:auto;max-height:calc(100vh - 48px);padding:.7rem;}
+#lp{border-right:1px solid #3a2010;}#rp{border-left:1px solid #3a2010;}
+#cp{overflow-y:auto;max-height:calc(100vh - 48px);padding:.9rem 1.1rem;}
+.sec h3{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gdd);border-bottom:1px solid #3a2010;padding-bottom:.28rem;margin-bottom:.45rem;margin-top:.7rem;}
+.sec h3:first-child{margin-top:0;}
+/* TABS */
+#tnav{display:flex;gap:.15rem;margin-bottom:.9rem;border-bottom:1px solid #3a2010;flex-wrap:wrap;}
+.tbtn{background:transparent;border:1px solid #3a2010;border-bottom:none;color:var(--smk);font-family:'Cinzel',serif;font-size:.64rem;padding:.35rem .65rem;cursor:pointer;transition:all .2s;letter-spacing:.07em;text-transform:uppercase;position:relative;top:1px;}
+.tbtn:hover{color:var(--pch);border-color:var(--gdd);}
+.tbtn.act{background:#0c0704;color:var(--gold);border-color:var(--gdd);border-bottom:1px solid #0c0704;}
+.tbtn.pulse{animation:tabp 1.5s ease-in-out infinite;}
+@keyframes tabp{0%,100%{color:var(--smk);}50%{color:#e74c3c;}}
+.tcon{display:none;}.tcon.act{display:block;}
+/* MINISTER CARDS */
+.mcard{background:rgba(0,0,0,.45);border:1px solid #3a2010;border-radius:2px;padding:.5rem;cursor:pointer;transition:all .2s;margin-bottom:.35rem;position:relative;}
+.mcard:hover{border-color:var(--gdd);background:rgba(100,50,0,.22);}
+.mcard.plotting{border-color:var(--purl);background:rgba(108,52,131,.1);}
+.mcard.selm{border-color:var(--gold);background:rgba(100,70,0,.2);}
+.mn{font-family:'Cinzel',serif;font-size:.78rem;color:var(--pch);}
+.mr{font-size:.65rem;color:var(--smk);font-style:italic;margin:.12rem 0;}
+.lbar{height:3px;background:#2a1510;border-radius:1px;overflow:hidden;margin:.3rem 0;}
+.lfill{height:100%;transition:width .5s;}
+.mst{display:flex;gap:.35rem;font-size:.6rem;color:var(--smk);}
+.mst b{color:var(--pchd);}
+.mbadge{position:absolute;top:.3rem;right:.3rem;font-size:.58rem;padding:1px 4px;border-radius:2px;}
+.loy{background:rgba(45,106,79,.4);color:var(--jadl);}.wav{background:rgba(139,106,20,.4);color:#f0c040;}.tra{background:rgba(139,26,26,.4);color:#e74c3c;}
+.pring{position:absolute;inset:-1px;border-radius:3px;border:2px solid transparent;animation:pr 1.2s ease-in-out infinite;pointer-events:none;}
+@keyframes pr{0%,100%{border-color:transparent;}50%{border-color:#9b59b6aa;}}
+.fb{margin-bottom:.45rem;}.fb .fl{display:flex;justify-content:space-between;font-size:.68rem;color:var(--pchd);margin-bottom:.12rem;}
+.fb .ft{height:4px;background:#2a1510;border-radius:2px;overflow:hidden;}.fb .ff{height:100%;border-radius:2px;transition:width .5s;}
+/* EVENTS */
+.ec{background:linear-gradient(135deg,#1a0f08,#0f0a05);border:1px solid var(--gdd);border-left:4px solid var(--gold);padding:.85rem 1rem;margin-bottom:.8rem;animation:sli .3s ease;}
+@keyframes sli{from{transform:translateX(-12px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+.ec.crisis{border-left-color:var(--crml);}.ec.opportunity{border-left-color:var(--jadl);}.ec.intrigue{border-left-color:var(--purl);}.ec.war{border-left-color:#e67e22;}.ec.court{border-left-color:#f0c040;}
+.etl{font-family:'Cinzel',serif;font-size:.88rem;color:var(--gdl);margin-bottom:.3rem;}
+.ec.crisis .etl{color:#e74c3c;}.ec.opportunity .etl{color:var(--jadl);}.ec.intrigue .etl{color:#c39bd3;}.ec.war .etl{color:#f39c12;}.ec.court .etl{color:#f0c040;}
+.etx{font-size:.78rem;line-height:1.75;color:var(--pchd);font-style:italic;margin-bottom:.65rem;}
+.ech{display:flex;flex-direction:column;gap:.3rem;}
+.ecb{background:rgba(0,0,0,.5);border:1px solid #3a2010;color:var(--pchd);font-family:'IM Fell English',serif;font-size:.76rem;padding:.4rem .7rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.5;}
+.ecb:hover{border-color:var(--gdd);background:rgba(100,60,0,.28);color:var(--pch);}
+.cc{float:right;font-size:.65rem;color:var(--smk);margin-left:.5rem;}
+/* DECREES */
+.dcg{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:.55rem;}
+.dc{background:#0f0805;border:1px solid #3a2010;padding:.7rem;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.dc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gdd);transform:scaleX(0);transition:transform .3s;}
+.dc:hover::before{transform:scaleX(1);}.dc:hover{border-color:var(--gdd);background:rgba(100,50,0,.18);}
+.dc.dis{opacity:.38;cursor:not-allowed;}.dc.actd{border-color:var(--jade);background:rgba(45,106,79,.13);}
+.ddn{font-family:'Cinzel',serif;font-size:.76rem;color:var(--gdl);margin-bottom:.22rem;}
+.ddd{font-size:.68rem;color:var(--smk);line-height:1.6;margin-bottom:.35rem;}
+.ddc{font-size:.64rem;color:var(--gdd);}.dde{font-size:.64rem;color:var(--jadl);margin-top:.18rem;}
+/* MILITARY */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.5rem;margin-bottom:.7rem;}
+.pcd{background:#0f0805;border:1px solid #3a2010;padding:.65rem;}
+.pn{font-family:'Cinzel',serif;font-size:.75rem;color:var(--pch);margin-bottom:.35rem;}
+.mbar2{display:flex;align-items:center;gap:.35rem;margin:.15rem 0;font-size:.64rem;color:var(--smk);}
+.mbar2 .bt{flex:1;height:4px;background:#2a1510;border-radius:2px;overflow:hidden;}.mbar2 .bf{height:100%;border-radius:2px;transition:width .5s;}
+.bgg{background:var(--gold);}.brr{background:var(--crml);}.bgr{background:var(--jadl);}.bbl{background:#3498db;}
+/* MAP */
+#dipl{display:grid;grid-template-columns:1fr 290px;gap:.8rem;}
+#mapwrap{position:relative;background:#0a1520;border:1px solid #2a3a50;overflow:hidden;}
+#wmap{width:100%;display:block;}
+.mtt{position:absolute;background:#1a0f08;border:1px solid var(--gdd);padding:.35rem .65rem;font-size:.7rem;color:var(--pch);pointer-events:none;display:none;z-index:10;white-space:nowrap;}
+.ncd{background:#0c0a06;border:1px solid #3a2010;margin-bottom:.4rem;cursor:pointer;transition:all .2s;}
+.ncd:hover{border-color:var(--gdd);}.ncd.sel{border-color:var(--gold);background:rgba(100,70,0,.18);}
+.ncdh{display:flex;align-items:center;gap:.45rem;padding:.5rem .6rem;font-family:'Cinzel',serif;font-size:.77rem;color:var(--pch);}
+.ncdb{padding:0 .6rem .5rem;display:none;}.ncd.sel .ncdb{display:block;}
+.rli{font-size:.67rem;padding:2px 5px;border-radius:2px;}
+.rla{background:rgba(45,106,79,.4);color:var(--jadl);}.rlf{background:rgba(45,106,79,.2);color:#88d4a8;}.rln{background:rgba(100,100,50,.2);color:#c0c070;}.rlt{background:rgba(139,70,20,.3);color:#f0a040;}.rlh{background:rgba(139,26,26,.4);color:#e74c3c;}
+.rlw{background:rgba(200,0,0,.4);color:#ff4444;animation:pw .8s ease-in-out infinite;}
+@keyframes pw{0%,100%{opacity:1;}50%{opacity:.5;}}
+.wbar{height:10px;background:#1a0505;border-radius:5px;overflow:hidden;border:1px solid #3a1010;margin:.3rem 0;}
+.wfill{height:100%;border-radius:5px;transition:width .5s;background:linear-gradient(90deg,#c0392b,#e74c3c);}
+.wfill.win{background:linear-gradient(90deg,#2d6a4f,#52b788);}
+.wlabs{display:flex;justify-content:space-between;font-size:.62rem;color:var(--smk);margin-top:.12rem;}
+.nacts{display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.4rem;}
+.na{background:rgba(0,0,0,.5);border:1px solid #3a2010;color:var(--smk);font-family:'Cinzel',serif;font-size:.6rem;padding:.18rem .45rem;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.na:hover{border-color:var(--gdd);color:var(--pch);}
+/* ECONOMY */
+.erow{display:flex;justify-content:space-between;align-items:center;padding:.27rem 0;border-bottom:1px solid #1a1008;font-size:.75rem;}
+.ek{color:var(--smk);}.ev{font-family:'Cinzel',serif;color:var(--gdl);}
+.eagrid{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.55rem;}
+.eab{background:rgba(0,0,0,.5);border:1px solid #3a2010;color:var(--smk);font-family:'IM Fell English',serif;font-size:.72rem;padding:.32rem .65rem;cursor:pointer;transition:all .2s;}
+.eab:hover{border-color:var(--gdd);color:var(--pch);}.eab.dng{border-color:#5a1010;color:#e74c3c;}.eab.dng:hover{border-color:var(--crml);}
+/* RIGHT PANEL */
+.rcg{display:grid;grid-template-columns:1fr 1fr;gap:.35rem;margin-bottom:.7rem;}
+.rcd{background:rgba(0,0,0,.3);border:1px solid #2a1a08;padding:.38rem .55rem;text-align:center;}
+.rv{font-family:'Cinzel',serif;font-size:.95rem;color:var(--gdl);display:block;}
+.rl{font-size:.6rem;color:var(--smk);text-transform:uppercase;letter-spacing:.07em;}
+.rd2{font-size:.62rem;margin-top:.1rem;}.dpos{color:var(--jadl);}.dneg{color:#e74c3c;}
+.ib{margin:.35rem 0;}.il{display:flex;justify-content:space-between;font-size:.65rem;color:var(--smk);margin-bottom:.1rem;}
+.it{height:5px;background:#2a1510;border-radius:2px;overflow:hidden;}.if{height:100%;border-radius:2px;transition:width .5s;}
+.srow{display:flex;justify-content:space-between;padding:.2rem 0;border-bottom:1px solid #1a1008;font-size:.72rem;color:var(--pchd);}
+.srow .sv{font-family:'Cinzel',serif;color:var(--gdl);}
+.empport{text-align:center;padding:.75rem;background:rgba(0,0,0,.3);border:1px solid #3a2010;margin-bottom:.55rem;}
+.ech2{font-size:2.2rem;line-height:1;}.ecnm{font-family:'Cinzel Decorative',serif;color:var(--gold);font-size:.78rem;margin-top:.28rem;}
+.ecer{font-size:.64rem;color:var(--smk);font-style:italic;}
+.loge{font-size:.68rem;padding:.22rem .42rem;border-left:2px solid #3a2010;font-style:italic;line-height:1.5;animation:fi .3s;margin-bottom:.22rem;color:var(--smk);}
+@keyframes fi{from{opacity:0;}to{opacity:1;}}
+.loge.gd{border-left-color:var(--jade);color:var(--jadl);}.loge.bd{border-left-color:var(--crim);color:#e57373;}
+.loge.nt{border-left-color:var(--gdd);color:var(--pchd);}.loge.cr{border-left-color:#e74c3c;color:#ef5350;font-weight:bold;}.loge.pl{border-left-color:var(--purl);color:#d7a8e8;}
+/* MODAL */
+#mo{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:500;}
+#mo.open{display:flex;}
+#mb{background:#0f0805;border:2px solid var(--gdd);max-width:560px;width:93%;padding:1.5rem;position:relative;animation:mop .3s ease;max-height:90vh;overflow-y:auto;}
+@keyframes mop{from{transform:scale(.88);opacity:0;}to{transform:scale(1);opacity:1;}}
+#mb h3{font-family:'Cinzel Decorative',serif;color:var(--gold);font-size:.95rem;margin-bottom:.7rem;}
+#mb p{font-style:italic;color:var(--pchd);line-height:1.8;margin-bottom:.7rem;font-size:.82rem;white-space:pre-wrap;}
+#mclose{position:absolute;top:.7rem;right:.7rem;background:none;border:none;color:var(--smk);cursor:pointer;font-size:1.1rem;}
+#mclose:hover{color:var(--pch);}
+.macts2{display:flex;gap:.35rem;flex-wrap:wrap;}
+.mab{background:rgba(0,0,0,.5);border:1px solid var(--gdd);color:var(--gdl);font-family:'Cinzel',serif;font-size:.72rem;padding:.42rem .85rem;cursor:pointer;transition:all .2s;}
+.mab:hover{background:rgba(139,105,20,.28);}.mab.d{border-color:var(--crim);color:#e74c3c;}.mab.d:hover{background:rgba(139,26,26,.28);}
+/* GAME OVER */
+#go{position:fixed;inset:0;background:rgba(0,0,0,.97);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:900;}
+#go.open{display:flex;}
+#go h2{font-family:'Cinzel Decorative',serif;font-size:2rem;color:var(--crml);text-shadow:0 0 40px rgba(192,57,43,.5);margin-bottom:.7rem;}
+.got{font-size:.9rem;color:var(--pchd);font-style:italic;margin-bottom:.35rem;text-align:center;max-width:500px;line-height:1.8;}
+.goy{font-family:'Cinzel',serif;color:var(--smk);font-size:.82rem;margin-bottom:1.6rem;}
+.gobtn{background:var(--crim);border:2px solid var(--gdd);color:var(--gold);font-family:'Cinzel',serif;font-size:.95rem;padding:.7rem 2.2rem;cursor:pointer;transition:all .3s;letter-spacing:.15em;}
+.gobtn:hover{background:var(--crml);}
+/* NOTIF */
+#notif{position:fixed;bottom:1.6rem;left:50%;transform:translateX(-50%) translateY(70px);background:#1a0f08;border:1px solid var(--gdd);color:var(--pch);font-family:'Cinzel',serif;font-size:.8rem;padding:.55rem 1.3rem;z-index:600;transition:transform .3s;pointer-events:none;white-space:nowrap;}
+#notif.show{transform:translateX(-50%) translateY(0);}
+#notif.gd{border-color:var(--jadl);color:var(--jadl);}#notif.bd{border-color:var(--crim);color:#e74c3c;}#notif.pl{border-color:var(--purl);color:#d7a8e8;}
+.empty{text-align:center;padding:2rem 1rem;color:var(--smk);font-style:italic;font-size:.8rem;}
+.bnum{display:inline-block;background:var(--crml);color:#fff;font-size:.6rem;font-family:'Cinzel',serif;border-radius:50%;width:14px;height:14px;line-height:14px;text-align:center;margin-left:3px;vertical-align:middle;}
+.wpp{animation:wpa .9s ease-in-out infinite;}@keyframes wpa{0%,100%{opacity:.7;}50%{opacity:1;}}
+/* ======= COURT INTRIGUE STYLES ======= */
+.mdet{background:#0a0704;border:1px solid var(--gdd);padding:1rem;animation:sli .3s ease;}
+.mdethdr{display:flex;align-items:center;gap:.75rem;margin-bottom:.7rem;}
+.mdetav{font-size:2rem;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4);border:1px solid #3a2010;border-radius:2px;flex-shrink:0;}
+.mdetnm{font-family:'Cinzel',serif;font-size:.9rem;color:var(--gdl);}
+.mdetrl{font-size:.7rem;color:var(--smk);font-style:italic;}
+.mdetfc{font-size:.65rem;padding:2px 6px;border-radius:2px;margin-top:.2rem;display:inline-block;}
+.trow{display:flex;flex-wrap:wrap;gap:.22rem;margin:.35rem 0;}
+.trait{font-size:.6rem;padding:2px 7px;border-radius:10px;background:rgba(100,60,0,.3);border:1px solid #5a3010;color:var(--pchd);}
+.trait.neg{background:rgba(139,26,26,.25);border-color:#5a1a1a;color:#e57373;}.trait.pos{background:rgba(45,106,79,.25);border-color:#1a4030;color:var(--jadl);}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:.3rem;margin:.45rem 0;}
+.ritem{background:rgba(0,0,0,.3);padding:.28rem .45rem;font-size:.66rem;}
+.ritem .rk{color:var(--smk);}.ritem .rv2{color:var(--gdl);font-family:'Cinzel',serif;}
+.cacts{display:grid;grid-template-columns:1fr 1fr;gap:.28rem;margin-top:.45rem;}
+.cab{background:rgba(0,0,0,.5);border:1px solid #3a2010;color:var(--smk);font-family:'IM Fell English',serif;font-size:.7rem;padding:.32rem .55rem;cursor:pointer;transition:all .2s;text-align:left;line-height:1.4;}
+.cab:hover{border-color:var(--gdd);color:var(--pch);background:rgba(100,60,0,.2);}
+.cab.pur{border-color:#4a1a6a;color:#c39bd3;}.cab.pur:hover{border-color:var(--purl);background:rgba(108,52,131,.2);}
+.cab.dng{border-color:#5a1010;color:#e74c3c;}.cab.dng:hover{border-color:var(--crml);background:rgba(139,26,26,.2);}
+.cab:disabled{opacity:.3;cursor:not-allowed;}
+.ientry{padding:.42rem .55rem;border-left:3px solid #3a2010;margin-bottom:.28rem;font-size:.72rem;line-height:1.6;animation:sli .3s ease;}
+.ientry.rumor{border-left-color:var(--smk);color:var(--smk);font-style:italic;}
+.ientry.truth{border-left-color:var(--jadl);color:var(--pchd);}
+.ientry.lie{border-left-color:var(--crml);color:#e57373;font-style:italic;}
+.ientry.plot{border-left-color:var(--purl);color:#d7a8e8;}
+.isrc{font-size:.6rem;color:var(--smk);margin-top:.08rem;}.iage{float:right;font-size:.58rem;color:var(--smk);}
+.ctag{font-size:.58rem;padding:1px 5px;border-radius:2px;}
+.ctag-l{background:rgba(139,26,26,.4);color:#e74c3c;}.ctag-t{background:rgba(45,106,79,.3);color:var(--jadl);}.ctag-r{background:rgba(100,80,0,.3);color:#f0c040;}
+.pcard{background:#0c0508;border:1px solid var(--purl);border-left:3px solid var(--purl);padding:.6rem;margin-bottom:.4rem;animation:sli .3s ease;}
+.pcard .pt{font-family:'Cinzel',serif;font-size:.78rem;color:#d7a8e8;margin-bottom:.18rem;}
+.pcard .px{font-size:.7rem;color:var(--pchd);font-style:italic;margin-bottom:.35rem;line-height:1.6;}
+.ppbar{height:5px;background:#2a1010;border-radius:2px;overflow:hidden;margin:.25rem 0;}
+.ppfill{height:100%;background:var(--purl);border-radius:2px;transition:width .6s;}
+.pacts{display:flex;gap:.28rem;flex-wrap:wrap;margin-top:.35rem;}
+.pab{background:rgba(0,0,0,.5);border:1px solid #4a2070;color:#c39bd3;font-family:'Cinzel',serif;font-size:.6rem;padding:.18rem .45rem;cursor:pointer;transition:all .2s;}
+.pab:hover{border-color:var(--purl);background:rgba(108,52,131,.25);}
+.pab.red{border-color:#5a1a1a;color:#e74c3c;}.pab.red:hover{border-color:var(--crml);}
+.cbub{background:#0f0c08;border:1px solid #3a2010;border-radius:2px;padding:.6rem;margin-bottom:.35rem;font-size:.76rem;font-style:italic;color:var(--pchd);line-height:1.7;animation:sli .25s ease;}
+.cbub .cbwho{font-family:'Cinzel',serif;font-size:.63rem;font-style:normal;color:var(--gdd);margin-bottom:.22rem;display:flex;align-items:center;gap:.35rem;}
+.creplies{margin-top:.45rem;display:flex;gap:.28rem;flex-wrap:wrap;}
+.crbtn{background:rgba(0,0,0,.5);border:1px solid #3a2010;color:var(--pchd);font-family:'IM Fell English',serif;font-size:.7rem;padding:.28rem .55rem;cursor:pointer;transition:all .2s;line-height:1.4;}
+.crbtn:hover{border-color:var(--gdd);background:rgba(100,60,0,.2);color:var(--pch);}
+.facdet{background:#0a0704;border:1px solid #3a2010;padding:.65rem;margin-bottom:.35rem;}
+.facdet h4{font-family:'Cinzel',serif;font-size:.72rem;color:var(--gdl);margin-bottom:.25rem;display:flex;justify-content:space-between;}
+.facdet p{font-size:.7rem;color:var(--pchd);font-style:italic;line-height:1.6;margin-bottom:.35rem;}
+.facacts{display:flex;gap:.28rem;flex-wrap:wrap;}
+.fabtn{background:rgba(0,0,0,.5);border:1px solid #3a2010;color:var(--smk);font-family:'Cinzel',serif;font-size:.6rem;padding:.2rem .45rem;cursor:pointer;transition:all .2s;}
+.fabtn:hover{border-color:var(--gdd);color:var(--pch);}
+.rship{display:flex;align-items:center;gap:.35rem;padding:.25rem 0;border-bottom:1px solid #1a1008;font-size:.7rem;}
+.rship .rname{min-width:95px;color:var(--pchd);}
+.rship .rbar2{flex:1;height:4px;background:#2a1510;border-radius:2px;overflow:hidden;}
+.rship .rbf{height:100%;border-radius:2px;transition:width .5s;}
+.rship .rlab{font-size:.62rem;min-width:55px;text-align:right;}
+.csec{background:#0a0704;border:1px solid #3a2010;padding:.7rem;margin-bottom:.6rem;}
+.csec h4{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;color:var(--gdd);margin-bottom:.45rem;}
+</style>
+</head>
+<body>
+<div id="splash">
+  <div class="spcn">天子</div>
+  <h1>Fils du Ciel</h1>
+  <p class="spsub">Simulateur de pouvoir impérial — Intrigues &amp; Complots</p>
+  <button class="spbtn" onclick="startGame()">Monter sur le Trône du Dragon</button>
+  <p class="spfl">Le Mandat du Ciel vous appartient — mais la cour est un nid de vipères. Vos ministres sourient en façade, complotent dans votre dos, traitent avec vos ennemis. Les factions s'affrontent pour votre faveur. Interrogez, soudoyez, menacez, pardonnez. Chaque décision forge votre légende — ou scelle votre chute.</p>
+</div>
+<div id="go"><h2>Le Mandat du Ciel est révoqué</h2><p class="got" id="gor"></p><p class="goy" id="goy"></p><button class="gobtn" onclick="resetGame()">Recommencer</button></div>
+<div id="mo"><div id="mb"><button id="mclose" onclick="closeModal()">✕</button><h3 id="mt"></h3><p id="mbp"></p><div class="macts2" id="ma"></div></div></div>
+<div id="notif"></div>
+<div id="game">
+  <div id="topbar">
+    <div class="ettl" id="tbt">Empereur</div>
+    <div class="chip" id="cht"><span>🪙</span><div><div class="cv" id="cvt">0</div><div class="cl">Trésor</div></div></div>
+    <div class="chip" id="chf"><span>🌾</span><div><div class="cv" id="cvf">0</div><div class="cl">Vivres</div></div></div>
+    <div class="chip" id="chp"><span>👥</span><div><div class="cv" id="cvp">0</div><div class="cl">Pop(M)</div></div></div>
+    <div class="chip" id="cha"><span>⚔️</span><div><div class="cv" id="cva">0</div><div class="cl">Armée(k)</div></div></div>
+    <div class="chip" id="chs"><span>☯️</span><div><div class="cv" id="cvs">0%</div><div class="cl">Stabilité</div></div></div>
+    <div class="chip" id="chm"><span>🌟</span><div><div class="cv" id="cvm">0%</div><div class="cl">Mandat</div></div></div>
+    <div id="yr"></div>
+    <button id="tbtn" onclick="endTurn()">⏭ Année suivante</button>
+  </div>
+  <div id="main">
+    <div id="lp">
+      <div class="sec"><h3>Conseil Impérial</h3><div id="mlist"></div></div>
+      <div class="sec"><h3>Factions de Cour</h3><div id="flist"></div></div>
+      <div class="sec"><h3>Alertes</h3><div id="alist"></div></div>
+    </div>
+    <div id="cp">
+      <div id="tnav">
+        <button class="tbtn act" onclick="switchTab('events')">Événements</button>
+        <button class="tbtn" onclick="switchTab('court')" id="tco">Cour &amp; Intrigues</button>
+        <button class="tbtn" onclick="switchTab('map')">Carte</button>
+        <button class="tbtn" onclick="switchTab('military')">Militaire</button>
+        <button class="tbtn" onclick="switchTab('economy')">Économie</button>
+        <button class="tbtn" onclick="switchTab('decrees')">Décrets</button>
+      </div>
+      <div id="tab-events" class="tcon act"><div id="evcon"></div></div>
+      <div id="tab-court" class="tcon"><div id="courtcon"></div></div>
+      <div id="tab-map" class="tcon">
+        <div id="dipl">
+          <div><div id="mapwrap"><svg id="wmap" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg"></svg><div class="mtt" id="mtt"></div></div>
+            <div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.4rem;font-size:.65rem;color:var(--smk);">🟢 Allié &nbsp;🟡 Ami &nbsp;⚪ Neutre &nbsp;🟠 Tendu &nbsp;🔴 Hostile &nbsp;💀 Guerre</div>
+          </div>
+          <div><div style="font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gdd);border-bottom:1px solid #3a2010;padding-bottom:.28rem;margin-bottom:.5rem;">Nations</div><div id="nlist"></div></div>
+        </div>
+      </div>
+      <div id="tab-military" class="tcon"><div id="milcon"></div></div>
+      <div id="tab-economy" class="tcon"><div id="ecocon"></div></div>
+      <div id="tab-decrees" class="tcon"><div class="dcg" id="deccon"></div></div>
+    </div>
+    <div id="rp">
+      <div class="empport"><div class="ech2">👑</div><div class="ecnm" id="emnm">Majesté</div><div class="ecer" id="emer">1ère année</div></div>
+      <div class="sec"><h3>Ressources</h3>
+        <div class="rcg">
+          <div class="rcd"><span class="rv" id="rvt">0</span><span class="rl">Trésor</span><div class="rd2" id="rdt"></div></div>
+          <div class="rcd"><span class="rv" id="rvf">0</span><span class="rl">Vivres</span><div class="rd2" id="rdf"></div></div>
+          <div class="rcd"><span class="rv" id="rvp">0</span><span class="rl">Prestige</span><div class="rd2" id="rdp"></div></div>
+          <div class="rcd"><span class="rv" id="rvj">0</span><span class="rl">Jade</span><div class="rd2" id="rdj"></div></div>
+        </div>
+      </div>
+      <div class="sec"><h3>Indicateurs</h3><div id="indcon"></div></div>
+      <div class="sec"><h3>Statistiques</h3><div id="statcon"></div></div>
+      <div class="sec"><h3>Chroniques</h3><div id="logcon"></div></div>
+    </div>
+  </div>
+</div>
+<script>
+// ===== HELPERS =====
+const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rnd=()=>Math.random();
+const pick=a=>a[Math.floor(rnd()*a.length)];
+const ri=(a,b)=>Math.floor(rnd()*(b-a+1))+a;
+
+// ===== PERSONALITY =====
+const PTYPES={
+  loyal:   {label:'Loyaliste',   color:'#52b788'},
+  ambitious:{label:'Ambitieux',  color:'#f0c040'},
+  corrupt: {label:'Corrompu',   color:'#e67e22'},
+  fanatic: {label:'Fanatique',   color:'#9b59b6'},
+  pragmatic:{label:'Pragmatique',color:'#3498db'},
+  scheming:{label:'Comploteur',  color:'#c0392b'},
+};
+const TPOS=['Loyal','Érudit','Stratège','Charismatique','Incorruptible','Dévoué'];
+const TNEG=['Ambitieux','Cupide','Rancunier','Intrigant','Corruptible','Perfide'];
+
+// ===== PLOT TYPES =====
+const PLOTS={
+  embezzle:{label:'Détournement de fonds',desc:'Détourne systématiquement les recettes fiscales.',max:80,
+    fx:(m,g)=>{const amt=ri(100,300);g.treasury-=amt;addLog(`${m.name} a détourné ${amt} or du Trésor`,'bd');},
+    hint:(m)=>`Des irrégularités comptables pointent vers ${m.name}. Ses dépenses personnelles dépassent largement ses émoluments officiels.`},
+  hoard:{label:'Constitution caisse secrète',desc:'Accumule une fortune pour financer une future rébellion.',max:90,
+    fx:(m,g)=>{g.treasury-=ri(200,500);m.plotTarget=null;m.plotProg=0;addLog(`${m.name} a constitué une caisse de guerre secrète`,'pl');},
+    hint:(m)=>`Plusieurs propriétés ont été achetées en secret au nom de proches de ${m.name}. Une richesse inexplicable.`},
+  forge_ev:{label:'Fabrication de preuves',desc:'Fabrique des preuves pour faire tomber un rival.',max:50,
+    fx:(m,g)=>{const rivals=g.ministers.filter(x=>x.id!==m.id&&(m.relationships[x.id]||0)<-10);
+      const target=rivals.length?pick(rivals):g.ministers.find(x=>x.id!==m.id);
+      if(target){target.loyalty=cl(target.loyalty-30,0,100);target.rumorsAbout.push(`Accusé de trahison par des "preuves" fabriquées`);addLog(`Des preuves falsifiées compromettent ${target.name}`,'pl');}},
+    hint:(m)=>`Un calligraphe de bas étage a été arrêté portant des documents au sceau de ${m.name}. Il nie, puis se tait.`},
+  faction_coup:{label:'Coup de faction',desc:'Coordonne sa faction pour renverser le trône.',max:100,
+    fx:(m,g)=>{g.stability=cl(g.stability-30,0,100);g.mandate=cl(g.mandate-25,0,100);addLog(`LE COUP DE ${m.name.toUpperCase()} A ÉBRANLÉ LE TRÔNE !`,'cr');},
+    hint:(m)=>`Des troupes non identifiées ont été vues se massant aux abords du palais. Les gardes murmurent le nom de ${m.name}.`},
+  poison:{label:'Assassinat par poison',desc:'Prépare l\'élimination d\'un rival en cour.',max:60,
+    fx:(m,g)=>{const rivals=g.ministers.filter(x=>x.id!==m.id&&(m.relationships[x.id]||0)<-20);
+      const target=rivals.length?pick(rivals):null;
+      if(target){g.ministers=g.ministers.filter(x=>x.id!==target.id);addLog(`${target.name} a été retrouvé mort — poison ?`,'cr');}},
+    hint:(m)=>`Un trafic d'arsenic et de ciguë a été intercepté dans un quartier fréquenté par les serviteurs de ${m.name}.`},
+  foreign_pact:{label:'Pacte étranger secret',desc:'Négocie avec une puissance hostile pour déstabiliser l\'Empire.',max:70,
+    fx:(m,g)=>{const hostile=g.nations.find(n=>n.relation<45&&!n.at_war);
+      if(hostile){hostile.relation=cl(hostile.relation+20,0,100);g.stability=cl(g.stability-18,0,100);addLog(`${m.name} a livré des secrets d'État à ${hostile.name} !`,'cr');}},
+    hint:(m)=>`Des lettres codées interceptées portent l'écriture de ${m.name}. Le destinataire semble étranger.`},
+};
+
+// ===== RUMOR TEMPLATES =====
+const RUMOR_TPL=[
+  (m)=>({t:`${m.name} aurait rencontré en secret un émissaire étranger la nuit dernière.`,tc:m.personality==='scheming'?.65:.2}),
+  (m)=>({t:`On dit que ${m.name} achète des loyautés au sein de la garnison impériale.`,tc:m.loyalty<45?.55:.15}),
+  (m)=>({t:`${m.name} aurait offert des présents somptueux à des gouverneurs de province sans autorisation.`,tc:m.corruption>40?.6:.2}),
+  (m)=>({t:`Des serviteurs de ${m.name} ont été surpris fouillant les archives impériales de nuit.`,tc:m.personality==='scheming'?.55:.12}),
+  (m)=>({t:`Il se murmure que ${m.name} entretient une liaison dangereuse avec le camp adverse.`,tc:m.loyalty<50?.45:.1}),
+  (m)=>({t:`${m.name} collectionnerait en secret des cartes militaires des passages de la Muraille.`,tc:m.personality==='ambitious'?.5:.08}),
+];
+
+// ===== NATIONS =====
+function makeNations(){return[
+  {id:'xiongnu',name:'Xiongnu',fn:'Confédération Xiongnu',emoji:'🏕️',rel:30,pow:75,wlth:40,pop:8,cap:'Longcheng',tr:['Cavalerie d\'élite','Pillards'],desc:'Nomades belliqueux — leur cavalerie est imbattable en plaine.',dact:['gift','tribute','marriage','wall','punish','vassalize'],war:false,vassal:false,ally:false,mthr:80},
+  {id:'mongolia',name:'Mongols',fn:'Tribus Mongoles',emoji:'🐎',rel:40,pow:60,wlth:35,pop:5,cap:'Karakorum',tr:['Archers à cheval','Nomades'],desc:'Tribus imprévisibles. Recrutables comme mercenaires.',dact:['gift','hire_merc','vassalize','punish'],war:false,vassal:false,ally:false,mthr:50},
+  {id:'tibet',name:'Tibet',fn:'Royaume du Tibet',emoji:'🏔️',rel:50,pow:55,wlth:50,pop:6,cap:'Lhassa',tr:['Altitude','Bouddhisme'],desc:'Royaume montagnard bouddhiste. Difficile à conquérir.',dact:['gift','marriage','alliance','trade','religion'],war:false,vassal:false,ally:false,mthr:30},
+  {id:'vietnam',name:'Đại Việt',fn:'Royaume du Đại Việt',emoji:'🌴',rel:45,pow:50,wlth:55,pop:10,cap:'Thăng Long',tr:['Guerrilla','Forêts'],desc:'Forêts impénétrables. Riche en ressources tropicales.',dact:['gift','trade','vassalize','punish','marriage'],war:false,vassal:false,ally:false,mthr:35},
+  {id:'korea',name:'Goryeo',fn:'Royaume de Goryeo',emoji:'⛩️',rel:65,pow:45,wlth:60,pop:8,cap:'Kaesong',tr:['Vassal loyal','Céramiques'],desc:'Vassal traditionnel. Partenaire commercial précieux.',dact:['gift','trade','alliance','demand_trib','marriage'],war:false,vassal:true,ally:false,mthr:15},
+  {id:'japan',name:'Japon',fn:'Archipel du Japon',emoji:'🌸',rel:35,pow:50,wlth:65,pop:12,cap:'Kyōto',tr:['Insulaire','Guerriers'],desc:'Archipel farouche — impossible à conquérir par mer.',dact:['gift','trade','pirates'],war:false,vassal:false,ally:false,mthr:20},
+  {id:'silk_west',name:'Sogdiane',fn:'Cités de Sogdiane',emoji:'🌙',rel:55,pow:40,wlth:80,pop:5,cap:'Samarkand',tr:['Marchands','Route de la Soie'],desc:'Maîtres des routes commerciales de l\'Ouest.',dact:['gift','trade','alliance','silk_grant'],war:false,vassal:false,ally:false,mthr:10},
+  {id:'india',name:'Inde du Nord',fn:'Royaumes de l\'Inde',emoji:'🐘',rel:45,pow:70,wlth:75,pop:30,cap:'Pataliputra',tr:['Éléphants','Épices'],desc:'Sous-continent immense. Partenaire commercial inestimable.',dact:['gift','trade','religion','marriage'],war:false,vassal:false,ally:false,mthr:40},
+];}
+
+const DDEFS={
+  gift:{l:'🎁 Présent',cost:{treasury:150},fx:(n,g)=>{n.rel=cl(n.rel+15,0,100);alog(`Don à ${n.name} (+15 rel.)`,'gd');}},
+  trade:{l:'📦 Commerce',cost:{treasury:100,prestige:5},fx:(n,g)=>{n.rel=cl(n.rel+20,0,100);g.tradeRoutes++;alog(`Traité com. ${n.name}`,'gd');}},
+  alliance:{l:'🤝 Alliance',cost:{jade:30,prestige:15},fx:(n,g)=>{if(n.rel>=55){n.ally=true;n.rel=cl(n.rel+25,0,100);alog(`Alliance: ${n.name}`,'gd');}else alog(`${n.name} refuse`,'bd');}},
+  marriage:{l:'💍 Mariage',cost:{jade:20,prestige:10},fx:(n,g)=>{n.rel=cl(n.rel+30,0,100);g.stability=cl(g.stability+5,0,100);alog(`Mariage: ${n.name}`,'gd');}},
+  tribute:{l:'💰 Payer tribut',cost:{treasury:300},fx:(n,g)=>{n.rel=cl(n.rel+35,0,100);n.war=false;g.wars=g.wars.filter(w=>w.nid!==n.id);g.prestige=cl(g.prestige-10,0,100);alog(`Tribut payé: ${n.name}`,'nt');}},
+  demand_trib:{l:'📜 Exiger tribut',cost:{prestige:10},fx:(n,g)=>{if(n.vassal||n.rel>70){g.treasury+=n.wlth*3;g.prestige+=10;alog(`Tribut de ${n.name} perçu`,'gd');}else{n.rel=cl(n.rel-20,0,100);alog(`${n.name} refuse`,'bd');}}},
+  vassalize:{l:'👑 Vassaliser',cost:{treasury:200,prestige:20},fx:(n,g)=>{if(g.militaryPower>n.pow+10&&n.rel>40){n.vassal=true;n.rel=cl(n.rel+10,0,100);alog(`${n.name} vassalisé`,'gd');}else{n.rel=cl(n.rel-25,0,100);alog(`${n.name} résiste`,'bd');if(n.rel<25)trigWar(n,g);}}},
+  punish:{l:'⚔️ Expédition',cost:{treasury:200},fx:(n,g)=>{if(g.militaryPower>n.pow){n.rel=cl(n.rel-15,0,100);g.prestige+=15;alog(`Punition ${n.name}: victoire`,'gd');}else{n.rel=cl(n.rel-30,0,100);g.armySize-=30;alog(`Punition ${n.name}: désastre`,'bd');trigWar(n,g);}}},
+  wall:{l:'🧱 Muraille',cost:{treasury:400,food:100},fx:(n,g)=>{g.militaryPower=cl(g.militaryPower+12,0,100);n.mthr=cl(n.mthr-20,0,100);g.prestige+=15;alog('Muraille étendue','gd');}},
+  hire_merc:{l:'⚔️ Mercenaires',cost:{treasury:250},fx:(n,g)=>{g.armySize+=30;g.armyMorale=cl(g.armyMorale-10,0,100);n.rel=cl(n.rel+10,0,100);alog(`Merc. ${n.name} recrutés`,'nt');}},
+  silk_grant:{l:'🧵 Route de la Soie',cost:{jade:25},fx:(n,g)=>{g.tradeRoutes+=2;g.treasury+=200;n.rel=cl(n.rel+20,0,100);alog('Route de la Soie: +2 routes','gd');}},
+  religion:{l:'☸️ Échange religieux',cost:{prestige:10},fx:(n,g)=>{n.rel=cl(n.rel+15,0,100);g.mandate=cl(g.mandate+5,0,100);alog(`Échange spirituel: ${n.name}`,'gd');}},
+  pirates:{l:'🏴‍☠️ Pirates secrets',cost:{treasury:100,jade:10},fx:(n,g)=>{if(rnd()<.5){g.treasury+=300;alog(`Piraterie: profits`,'nt');}else{n.rel=cl(n.rel-20,0,100);g.prestige-=10;alog(`Piraterie découverte !`,'bd');}}},
+};
+
+function trigWar(n,g){if(!g.wars.find(w=>w.nid===n.id)){g.wars.push({nid:n.id,prog:50,turn:g.turn});n.war=true;alog(`⚔️ Guerre: ${n.name} !`,'cr');snotif(`⚔️ Guerre : ${n.name}`,'bd');}}
+
+// ===== FACTIONS =====
+function makeFactions(){return[
+  {id:'scholar',name:'Lettrés Confucéens',power:35,appr:60,emoji:'📚',agenda:'Réforme administrative et méritocratie.',
+   demand:{l:'Financer l\'Académie Impériale',c:{treasury:200},fx:(g)=>{g.techLevel=cl(g.techLevel+10,0,100);g.factions.find(f=>f.id==='scholar').appr=cl(g.factions.find(f=>f.id==='scholar').appr+20,0,100);alog('Académie financée','gd');}}},
+  {id:'military',name:'Clique Militaire',power:30,appr:55,emoji:'🗡️',agenda:'Expansion et hausse des effectifs militaires.',
+   demand:{l:'Augmenter la solde',c:{treasury:300},fx:(g)=>{g.armyMorale=cl(g.armyMorale+20,0,100);g.factions.find(f=>f.id==='military').appr=cl(g.factions.find(f=>f.id==='military').appr+25,0,100);alog('Solde augmentée','gd');}}},
+  {id:'merchant',name:'Guildes Marchandes',power:25,appr:50,emoji:'⚖️',agenda:'Libre commerce et réduction des taxes.',
+   demand:{l:'Réduire les droits de douane',c:{treasury:0},fx:(g)=>{g.tradeRoutes++;g.factions.find(f=>f.id==='merchant').appr=cl(g.factions.find(f=>f.id==='merchant').appr+20,0,100);alog('Douanes réduites','gd');}}},
+  {id:'eunuch',name:'Eunuques de Cour',power:20,appr:45,emoji:'🏛️',agenda:'Influence sur la chambre impériale privée.',
+   demand:{l:'Décerner titres honorifiques',c:{prestige:15,jade:10},fx:(g)=>{g.factions.find(f=>f.id==='eunuch').appr=cl(g.factions.find(f=>f.id==='eunuch').appr+25,0,100);g.stability=cl(g.stability+3,0,100);alog('Titres accordés','gd');}}},
+  {id:'peasant',name:'Masse Paysanne',power:40,appr:60,emoji:'🌾',agenda:'Allègement fiscal et accès à la terre.',
+   demand:{l:'Redistribuer des terres',c:{treasury:100,prestige:20},fx:(g)=>{g.happiness=cl(g.happiness+15,0,100);g.mandate=cl(g.mandate+8,0,100);g.factions.find(f=>f.id==='peasant').appr=cl(g.factions.find(f=>f.id==='peasant').appr+20,0,100);alog('Terres redistribuées','gd');}}},
+];}
+
+// ===== MINISTERS =====
+function makeMinisters(){
+  const ms=[
+    {id:'chancellor',name:'Wei Zhongshu',role:'Grand Chancelier',emoji:'🧑‍💼',
+     loyalty:72,corruption:12,competence:82,faction:'scholar',personality:'loyal',
+     traits:['Érudit','Incorruptible'],
+     skills:{admin:85,mil:18,eco:62,dip:56},
+     desc:'Fin lettré confucéen. Sa loyauté est profonde, sa rigidité irrite. Gardien de l\'orthodoxie.',
+     hates:[],likes:['censor'],relationships:{},plotTarget:null,plotProg:0,
+     suspicion:0,favor:50,rumorsAbout:[],knownSecrets:[]},
+    {id:'general',name:'Bao Tianjun',role:'Grand Général',emoji:'⚔️',
+     loyalty:88,corruption:8,competence:78,faction:'military',personality:'loyal',
+     traits:['Stratège','Loyal'],
+     skills:{admin:22,mil:92,eco:18,dip:32},
+     desc:'Vétéran des campagnes du nord. Très respecté de ses soldats — sa défection serait catastrophique.',
+     hates:[],likes:[],relationships:{},plotTarget:null,plotProg:0,
+     suspicion:0,favor:55,rumorsAbout:[],knownSecrets:[]},
+    {id:'treasurer',name:'Jin Haomin',role:'Grand Trésorier',emoji:'💰',
+     loyalty:55,corruption:38,competence:72,faction:'merchant',personality:'corrupt',
+     traits:['Cupide','Pragmatique'],
+     skills:{admin:52,mil:8,eco:92,dip:50},
+     desc:'Génie des finances. Ses malversations sont connues de tous — il les compense par des résultats brillants.',
+     hates:['censor'],likes:[],relationships:{},plotTarget:null,plotProg:0,
+     suspicion:0,favor:45,rumorsAbout:[],knownSecrets:[]},
+    {id:'spymaster',name:'Liu Anying',role:'Maître des Ombres',emoji:'🕵️',
+     loyalty:62,corruption:45,competence:90,faction:'eunuch',personality:'scheming',
+     traits:['Intrigant','Perfide'],
+     skills:{admin:42,mil:38,eco:28,dip:72},
+     desc:'Son réseau d\'espions est tentaculaire. Il sait tout — et vend l\'information au plus offrant.',
+     hates:['censor'],likes:[],relationships:{},plotTarget:null,plotProg:0,
+     suspicion:0,favor:40,rumorsAbout:[],knownSecrets:[]},
+    {id:'censor',name:'Kong Zhengyi',role:'Grand Censeur',emoji:'📜',
+     loyalty:82,corruption:3,competence:68,faction:'scholar',personality:'fanatic',
+     traits:['Incorruptible','Rancunier'],
+     skills:{admin:78,mil:12,eco:32,dip:42},
+     desc:'Intégrité absolue — et intolérance absolue. Déteste les corrompus et n\'hésite pas à les dénoncer.',
+     hates:['treasurer','spymaster'],likes:['chancellor'],relationships:{},plotTarget:null,plotProg:0,
+     suspicion:0,favor:60,rumorsAbout:[],knownSecrets:[]},
+    {id:'prince',name:'Cao Renlong',role:'Premier Prince Impérial',emoji:'👸',
+     loyalty:58,corruption:20,competence:62,faction:'military',personality:'ambitious',
+     traits:['Ambitieux','Charismatique','Perfide'],
+     skills:{admin:45,mil:65,eco:40,dip:55},
+     desc:'Votre cousin, prétendant le plus puissant au trône. Courtois en façade — terriblement dangereux.',
+     hates:['censor','chancellor'],likes:['general'],relationships:{},plotTarget:null,plotProg:0,
+     suspicion:0,favor:32,rumorsAbout:[],knownSecrets:[]},
+  ];
+  // Build relationship matrix
+  ms.forEach(m=>{
+    m.relationships={};
+    ms.forEach(o=>{
+      if(o.id===m.id)return;
+      let base=ri(15,55);
+      if(m.hates.includes(o.id))base-=45;
+      if(m.likes.includes(o.id))base+=30;
+      if(m.faction===o.faction)base+=15;
+      m.relationships[o.id]=cl(base,-100,100);
+    });
+  });
+  return ms;
+}
+
+// ===== PROVINCES =====
+function makeProvinces(){return[
+  {id:'hebei',name:'Hebei',loyalty:75,tax:120,troops:30,food:80,unrest:15},
+  {id:'shandong',name:'Shandong',loyalty:70,tax:100,troops:25,food:90,unrest:20},
+  {id:'sichuan',name:'Sichuan',loyalty:60,tax:90,troops:20,food:100,unrest:30},
+  {id:'jiangsu',name:'Jiangsu',loyalty:80,tax:150,troops:35,food:70,unrest:10},
+  {id:'guangdong',name:'Guangdong',loyalty:55,tax:110,troops:20,food:85,unrest:35},
+  {id:'shanxi',name:'Shanxi',loyalty:65,tax:80,troops:15,food:75,unrest:25},
+];}
+// ===== EVENTS =====
+const EVENTS=[
+  {id:'flood',type:'crisis',title:'Crues du Fleuve Jaune',
+   text:'Des inondations dévastent les plaines du nord. Les récoltes sont perdues, les paysans fuient.',
+   cond:(g)=>g.irrigation<60&&rnd()<.35,
+   choices:[
+     {t:'Envoyer secours et ingénieurs',c:'−200 or, −150 vivres',e:(g)=>{g.treasury-=200;g.food-=150;g.happiness=cl(g.happiness+8,0,100);g.stability=cl(g.stability+5,0,100);alog('Secours impériaux','gd');}},
+     {t:'Corvées de reconstruction',c:'−bonheur',e:(g)=>{g.happiness=cl(g.happiness-15,0,100);g.stability=cl(g.stability-5,0,100);g.treasury-=50;alog('Corvées — mécontentement','bd');}},
+     {t:'Ignorer — le Ciel a décidé',c:'−25 bonheur',e:(g)=>{g.happiness=cl(g.happiness-25,0,100);g.stability=cl(g.stability-15,0,100);g.food-=200;alog('Abandon impérial','bd');}},
+   ]},
+  {id:'drought',type:'crisis',title:'Grande Sécheresse',
+   text:'Le ciel refuse ses pluies. Les puits s\'assèchent. Murmures de mauvais présages.',
+   cond:(g)=>!g.droughtActive&&rnd()<.25,onAct:(g)=>{g.droughtActive=true;},
+   choices:[
+     {t:'Ouvrir les greniers impériaux',c:'−300 vivres',e:(g)=>{g.food-=300;g.happiness=cl(g.happiness+10,0,100);g.mandate=cl(g.mandate+5,0,100);alog('Greniers ouverts','gd');}},
+     {t:'Rites de pluie solennels',c:'−100 or',e:(g)=>{g.treasury-=100;g.jade=Math.max(0,g.jade-30);g.mandate=cl(g.mandate+10,0,100);g.droughtActive=rnd()<.4;alog('Rites solennels','nt');}},
+     {t:'Taxer les marchands',c:'−marchands',e:(g)=>{g.food-=100;g.factions.find(f=>f.id==='merchant').appr=cl(g.factions.find(f=>f.id==='merchant').appr-20,0,100);g.happiness=cl(g.happiness+5,0,100);alog('Marchands taxés','nt');}},
+   ]},
+  {id:'harvest',type:'opportunity',title:'Récolte Exceptionnelle',
+   text:'Une abondance inégalée. Les greniers regorgent, les paysans chantent.',
+   cond:(g)=>!g.droughtActive&&g.irrigation>=50&&rnd()<.3,
+   choices:[
+     {t:'Remplir les greniers d\'État',c:'Gratuit',e:(g)=>{g.food+=300;g.stability=cl(g.stability+3,0,100);alog('Greniers débordent','gd');}},
+     {t:'Réduire la taxe agricole',c:'−80 or',e:(g)=>{g.treasury-=80;g.happiness=cl(g.happiness+15,0,100);g.mandate=cl(g.mandate+5,0,100);alog('Clémence fiscale','gd');}},
+     {t:'Exporter via Route de la Soie',c:'+200 or',e:(g)=>{g.treasury+=200;g.prestige=cl(g.prestige+5,0,100);alog('Export lucratif','gd');}},
+   ]},
+  {id:'rebellion',type:'crisis',title:'Soulèvement Paysan',
+   text:'Une province se soulève ! Un prédicateur se proclame "Fils du Ciel véritable".',
+   cond:(g)=>!g.rebellionActive&&g.happiness<35&&rnd()<.5,onAct:(g)=>{g.rebellionActive=true;},
+   choices:[
+     {t:'Écraser militairement',c:'−armée',e:(g)=>{if(g.militaryPower>50){g.rebellionActive=false;g.armySize-=30;g.stability=cl(g.stability+15,0,100);alog('Rébellion écrasée','nt');}else{g.stability=cl(g.stability-20,0,100);g.treasury-=200;alog('Armée insuffisante','bd');}}},
+     {t:'Amnistie et réforme fiscale',c:'−200 or',e:(g)=>{if(g.treasury>=200){g.rebellionActive=false;g.treasury-=200;g.happiness=cl(g.happiness+20,0,100);g.mandate=cl(g.mandate+10,0,100);alog('Clémence impériale','gd');}else alog('Trésor insuffisant','bd');}},
+     {t:'Promettre des réformes',c:'Risqué',e:(g)=>{if(rnd()<.5){g.rebellionActive=false;g.happiness=cl(g.happiness+10,0,100);alog('Promesses calment','gd');}else{g.stability=cl(g.stability-15,0,100);alog('Promesses vides','bd');}}},
+   ]},
+  {id:'plague',type:'crisis',title:'Épidémie Terrible',
+   text:'Une épidémie ravage les provinces. Villages vidés, médecins dépassés.',
+   cond:(g)=>!g.plagueActive&&rnd()<.2,onAct:(g)=>{g.plagueActive=true;},
+   choices:[
+     {t:'Médecins impériaux — dépenses massives',c:'−300 or',e:(g)=>{g.treasury-=300;g.plagueActive=false;g.mandate=cl(g.mandate+10,0,100);alog('Médecine enraye l\'épidémie','gd');}},
+     {t:'Quarantaine des provinces',c:'−pop',e:(g)=>{g.population=Math.max(5,g.population-1);g.treasury-=100;g.plagueActive=rnd()<.4;alog('Quarantaine','nt');}},
+     {t:'Prier le Ciel',c:'−pop, −mandat',e:(g)=>{g.population=Math.max(5,g.population-3);g.mandate=cl(g.mandate-15,0,100);alog('L\'inaction coûte des vies','bd');}},
+   ]},
+  {id:'caravan',type:'opportunity',title:'Grande Caravane Marchande',
+   text:'Une caravane de l\'Ouest arrive. Ses marchands sollicitent une audience.',
+   cond:(g)=>g.tradeRoutes>=2&&rnd()<.35,
+   choices:[
+     {t:'Audience et négociation',c:'+300 or',e:(g)=>{g.treasury+=300;g.prestige=cl(g.prestige+10,0,100);g.jade+=15;alog('Échanges lucratifs','gd');}},
+     {t:'Exiger tributs de protection',c:'+500 or, −relations',e:(g)=>{g.treasury+=500;g.prestige=cl(g.prestige-5,0,100);g.factions.find(f=>f.id==='merchant').appr=cl(g.factions.find(f=>f.id==='merchant').appr-10,0,100);alog('Tributs perçus','nt');}},
+     {t:'Refuser — autarcie',c:'−prestige',e:(g)=>{g.prestige=cl(g.prestige-10,0,100);alog('Autarcie maintenue','nt');}},
+   ]},
+  {id:'court_scandal',type:'court',title:'Scandale de Cour',
+   text:'Des rumeurs de trahison circulent dans les couloirs du palais. Deux clans s\'accusent devant votre trône.',
+   cond:(g)=>g.ministers.length>=3&&rnd()<.3,
+   choices:[
+     {t:'Enquête secrète via le Maître des Ombres',c:'−50 or',e:(g)=>{const spy=g.ministers.find(m=>m.id==='spymaster');const tgt=pick(g.ministers.filter(m=>m.id!=='spymaster'));if(spy&&spy.loyalty>40&&tgt){g.intelFeed.unshift({text:`Enquête: ${tgt.name} entretient des contacts suspects avec une faction adverse.`,type:'truth',src:spy.name,turn:g.turn,about:tgt.id});}else if(tgt){g.intelFeed.unshift({text:`Résultat douteux — votre Maître des Ombres vous ment peut-être.`,type:'lie',src:'Inconnu',turn:g.turn,about:null});}g.treasury-=50;alog('Enquête de cour lancée','pl');updBadge();}},
+     {t:'Trancher en faveur d\'un clan',c:'−faction rivale',e:(g)=>{const f=pick(g.factions.filter(f=>f.id!=='peasant'));f.appr=cl(f.appr+20,0,100);const rv=pick(g.factions.filter(x=>x.id!==f.id&&x.id!=='peasant'));rv.appr=cl(rv.appr-15,0,100);alog(`Soutien aux ${f.name}. Rival froissé.`,'nt');}},
+     {t:'Ignorer — affaire mineure',c:'−stabilité',e:(g)=>{g.stability=cl(g.stability-8,0,100);g.corruption=cl(g.corruption+8,0,100);alog('Scandale ignoré — corruption prolifère','bd');}},
+   ]},
+  {id:'plot_reveal',type:'intrigue',title:'Information sur un Complot',
+   text:'Un serviteur apeuré se présente à votre chambre de nuit. Il affirme avoir entendu des choses troublantes.',
+   cond:(g)=>g.ministers.some(m=>m.plotTarget&&m.plotProg>30)&&rnd()<.45,
+   choices:[
+     {t:'L\'écouter attentivement',c:'Info précieuse ou mensonge',e:(g)=>{const plotter=g.ministers.find(m=>m.plotTarget&&m.plotProg>30);if(plotter&&rnd()<.65){const pt=PLOTS[plotter.plotTarget];g.intelFeed.unshift({text:pt?pt.hint(plotter):`${plotter.name} prépare quelque chose...`,type:'truth',src:'Serviteur anonyme',turn:g.turn,about:plotter.id});plotter.suspicion=cl(plotter.suspicion+25,0,100);alog(`Révélation sur ${plotter.name}`,'pl');}else{const innocent=pick(g.ministers.filter(m=>!m.plotTarget));if(innocent){g.intelFeed.unshift({text:`Le serviteur accuse ${innocent.name} — mais ses yeux tremblent. Peut-être envoyé par quelqu'un d'autre.`,type:'rumor',src:'Serviteur anonyme',turn:g.turn,about:innocent.id});}}updBadge();}},
+     {t:'Le faire arrêter — trop dangereux',c:'−info',e:(g)=>{alog('Le serviteur est arrêté. L\'info est perdue.','nt');}},
+     {t:'Le récompenser et le renvoyer',c:'−50 or, +info',e:(g)=>{g.treasury-=50;const plotter=g.ministers.find(m=>m.plotTarget&&m.plotProg>20);if(plotter){g.intelFeed.unshift({text:`Indices renforcés sur les activités nocturnes de ${plotter.name}.`,type:'rumor',src:'Serviteur récompensé',turn:g.turn,about:plotter.id});plotter.suspicion=cl(plotter.suspicion+15,0,100);}alog('Serviteur récompensé et renvoyé','gd');updBadge();}},
+   ]},
+];
+
+// ===== DECREES =====
+const DECREES=[
+  {id:'silk_road',name:'Route de la Soie Royale',emoji:'🧵',desc:'Sécuriser les routes commerciales.',cost:{treasury:200,prestige:10},eff:{tradeRoutes:1},dur:-1,cond:(g)=>g.tradeRoutes<8},
+  {id:'canal',name:'Grand Canal Impérial',emoji:'🚣',desc:'Canaux reliant nord et sud.',cost:{treasury:350,food:100},eff:{irrigation:20,happiness:10},dur:-1,cond:(g)=>g.irrigation<90},
+  {id:'census',name:'Grand Recensement',emoji:'📊',desc:'Recenser pour optimiser la taxation.',cost:{treasury:100},eff:{corruption:-10},dur:-1,cond:()=>true},
+  {id:'army_reform',name:'Réforme de l\'Armée',emoji:'🏹',desc:'Moderniser équipement et tactique.',cost:{treasury:300,jade:20},eff:{militaryPower:20,armyMorale:15},dur:-1,cond:(g)=>g.militaryPower<90},
+  {id:'granary',name:'Greniers Impériaux',emoji:'🏚️',desc:'Réseau de greniers contre les famines.',cost:{treasury:200,food:150},eff:{stability:10},dur:-1,cond:()=>true},
+  {id:'palace',name:'Extension du Palais',emoji:'🏯',desc:'Nouveaux pavillons — prestige.',cost:{treasury:400,jade:30},eff:{prestige:30,mandate:10,happiness:5},dur:-1,cond:(g)=>g.prestige<90},
+  {id:'tax_cut',name:'Réduction Fiscale',emoji:'💸',desc:'Alléger les impôts paysans.',cost:{treasury:150},eff:{happiness:20,mandate:8},dur:2,cond:(g)=>g.happiness<80},
+  {id:'spy_net',name:'Réseau d\'Espions',emoji:'🕵️',desc:'Étendre le renseignement impérial.',cost:{treasury:150,jade:10},eff:{corruption:-15,stability:8},dur:-1,cond:(g)=>g.corruption>15},
+  {id:'academy',name:'Académie Confucéenne',emoji:'🎓',desc:'Former les fonctionnaires.',cost:{treasury:250,prestige:15},eff:{techLevel:15,corruption:-10},dur:-1,cond:(g)=>g.techLevel<80},
+  {id:'wall_ext',name:'Extension Muraille',emoji:'🧱',desc:'Sécuriser les passes vulnérables.',cost:{treasury:400,food:100},eff:{militaryPower:15,prestige:20},dur:-1,cond:(g)=>g.militaryPower<85},
+];
+
+// ===== MAP =====
+const MREGIONS=[
+  {id:'cn',l:'Chine du Nord',cx:470,cy:210,rx:88,ry:62,t:'china'},
+  {id:'cs',l:'Chine du Sud',cx:490,cy:305,rx:82,ry:58,t:'china'},
+  {id:'cw',l:'Sichuan',cx:400,cy:290,rx:52,ry:42,t:'china'},
+  {id:'xn',l:'Xiongnu',cx:440,cy:100,rx:115,ry:50,t:'nation',nid:'xiongnu'},
+  {id:'tb',l:'Tibet',cx:310,cy:258,rx:75,ry:50,t:'nation',nid:'tibet'},
+  {id:'vn',l:'Đại Việt',cx:490,cy:400,rx:52,ry:38,t:'nation',nid:'vietnam'},
+  {id:'ko',l:'Goryeo',cx:600,cy:178,rx:52,ry:42,t:'nation',nid:'korea'},
+  {id:'jp',l:'Japon',cx:678,cy:215,rx:46,ry:55,t:'nation',nid:'japan'},
+  {id:'sw',l:'Sogdiane',cx:200,cy:195,rx:75,ry:46,t:'nation',nid:'silk_west'},
+  {id:'mg',l:'Mongolie',cx:368,cy:120,rx:70,ry:38,t:'nation',nid:'mongolia'},
+  {id:'in',l:'Inde du Nord',cx:218,cy:340,rx:76,ry:48,t:'nation',nid:'india'},
+  {id:'gb',l:'Désert de Gobi',cx:378,cy:165,rx:56,ry:25,t:'geo'},
+  {id:'sea',l:'Mer de Chine',cx:638,cy:330,rx:85,ry:65,t:'sea'},
+];
+
+// ===== STATE =====
+let G={};
+const NAMES=['Xuanlong','Tianzhen','Mingwei','Longzheng','Tianshun','Hongwu','Jianwen','Xuande'];
+const ERAS=['Règne de la Paix Dorée','Ère du Lotus Écarlate','Ère du Dragon Céleste','Cycle de Jade','Règne du Phénix','Ère de la Grande Harmonie'];
+
+function initState(){return{
+  turn:1, emperorName:pick(NAMES), eraName:pick(ERAS),
+  treasury:800,food:600,prestige:50,jade:20,
+  dT:0,dF:0,
+  stability:70,mandate:80,corruption:20,happiness:65,
+  militaryPower:60,techLevel:30,irrigation:50,tradeRoutes:3,
+  population:45,armySize:120,armyMorale:70,
+  activeDecrees:[],decreeTurns:{},
+  pendingEvents:[],
+  droughtActive:false,plagueActive:false,rebellionActive:false,
+  wars:[],
+  ministers:makeMinisters(),
+  factions:makeFactions(),
+  nations:makeNations(),
+  provinces:makeProvinces(),
+  log:[],
+  selMinister:null,
+  selNation:null,
+  intelFeed:[],
+  activeConv:null,
+  discoveredPlots:[],
+  courtIntrigueLevel:20,
+  actionsUsed:0,
+  maxActions:3,
+};}
+// ===== PLOT ENGINE =====
+function processMinisters(){
+  G.ministers.forEach(m=>{
+    // Faction loyalty drift
+    const f=G.factions.find(x=>x.id===m.faction);
+    if(f){
+      if(f.appr<35)m.loyalty=cl(m.loyalty-2,0,100);
+      if(f.appr>75)m.loyalty=cl(m.loyalty+1,0,100);
+    }
+    // Decide to plot
+    if(!m.plotTarget&&shouldPlot(m))startPlot(m);
+
+    // Advance plot
+    if(m.plotTarget){
+      const sp=getPlotSpeed(m);
+      m.plotProg=cl(m.plotProg+sp,0,200);
+      const pt=PLOTS[m.plotTarget];if(!pt)return;
+      // Detection chance
+      if(rnd()<getDetectChance(m)){
+        G.intelFeed.unshift({text:pt.hint(m),type:'plot',src:getIntelSrc(m),turn:G.turn,about:m.id});
+        m.suspicion=cl(m.suspicion+15,0,100);
+        updBadge();
+        alog(`Indice de complot détecté à la cour`,'pl');
+      }
+      // Plot completes
+      if(m.plotProg>=pt.max){
+        pt.fx(m,G);
+        m.plotTarget=null;m.plotProg=0;
+        G.courtIntrigueLevel=cl(G.courtIntrigueLevel+18,0,100);
+        alog(`Un complot s'est accompli à la cour !`,'cr');
+        snotif('🕷️ Complot accompli !','pl');
+      }
+    }
+
+    // Relationship drift
+    Object.keys(m.relationships).forEach(oid=>{
+      const o=G.ministers.find(x=>x.id===oid);if(!o)return;
+      if(m.faction===o.faction)m.relationships[oid]=cl(m.relationships[oid]+1,-100,100);
+      else if(rnd()<.08)m.relationships[oid]=cl(m.relationships[oid]+(rnd()<.5?-2:1),-100,100);
+    });
+
+    // Random rumor generation
+    if(rnd()<.1&&m.personality==='scheming'){
+      const tgt=pick(G.ministers.filter(x=>x.id!==m.id));
+      if(tgt){
+        const tpl=pick(RUMOR_TPL);const r=tpl(tgt);
+        const isReal=rnd()<r.tc;
+        G.intelFeed.unshift({text:r.t,type:isReal?'truth':'rumor',src:m.loyalty>60?m.name:'Source inconnue',turn:G.turn,about:tgt.id});
+        if(G.intelFeed.length>35)G.intelFeed.pop();
+        updBadge();
+      }
+    }
+  });
+
+  // Faction power shifts
+  G.factions.forEach(f=>{
+    let d=0;
+    if(f.id==='peasant')d=(G.happiness-60)*0.12;
+    if(f.id==='military')d=(G.militaryPower-60)*0.06;
+    f.power=cl(f.power+d,5,80);
+    // Slow approval drift back toward 50
+    if(f.appr>55&&rnd()<.08)f.appr=cl(f.appr-1,0,100);
+    if(f.appr<45&&rnd()<.08)f.appr=cl(f.appr+1,0,100);
+  });
+}
+
+function shouldPlot(m){
+  if(m.loyalty>78)return false;
+  if(m.personality==='loyal'&&m.loyalty>55)return false;
+  let chance=0.08+(m.personality==='scheming'?.22:0)+(m.personality==='ambitious'?.12:0);
+  if(m.loyalty<40)chance+=0.18;
+  if(m.corruption>50)chance+=0.08;
+  chance+=G.courtIntrigueLevel/400;
+  return rnd()<chance;
+}
+
+function startPlot(m){
+  const avail=['embezzle','hoard'];
+  if(m.loyalty<50)avail.push('forge_ev','faction_coup');
+  if(m.personality==='scheming'&&m.loyalty<55)avail.push('poison','foreign_pact');
+  m.plotTarget=pick(avail);m.plotProg=0;
+  alog(`Mouvement suspect à la cour`,'pl');
+}
+
+function getPlotSpeed(m){
+  let s=ri(2,8);
+  if(m.personality==='scheming')s+=3;
+  if(m.competence>75)s+=2;
+  if(m.suspicion>50)s-=4;
+  if(G.activeDecrees.includes('spy_net'))s-=3;
+  return Math.max(1,s);
+}
+
+function getDetectChance(m){
+  let c=0.06;
+  if(G.activeDecrees.includes('spy_net'))c+=0.14;
+  const spy=G.ministers.find(x=>x.id==='spymaster');
+  if(spy&&spy.loyalty>55)c+=spy.skills.admin/600;
+  if(m.suspicion>50)c+=0.1;
+  return cl(c,0.02,0.42);
+}
+
+function getIntelSrc(m){
+  const spy=G.ministers.find(x=>x.id==='spymaster');
+  if(spy&&spy.loyalty>62)return spy.name;
+  const rivals=G.ministers.filter(x=>x.id!==m.id&&(m.relationships[x.id]||0)<-15);
+  if(rivals.length&&rnd()<.5)return pick(rivals).name;
+  return 'Source inconnue';
+}
+
+function updBadge(){
+  const btn=document.getElementById('tco');if(!btn)return;
+  const fresh=G.intelFeed.filter(i=>!i.read&&G.turn-i.turn<=1).length;
+  const plots=G.ministers.filter(m=>m.plotTarget&&m.suspicion>20).length;
+  const total=fresh+plots;
+  btn.innerHTML='Cour &amp; Intrigues'+(total>0?`<span class="bnum">${Math.min(9,total)}</span>`:'');
+  if(plots>0)btn.classList.add('pulse');else btn.classList.remove('pulse');
+}
+
+// ===== CONVERSATION ENGINE =====
+const CONV_OPENINGS={
+  loyal:[`Votre Majesté, votre serviteur est à votre entière disposition. Parlez.`,
+         `Fils du Ciel, je vous suis dévoué corps et âme. Que puis-je pour l'Empire ?`],
+  ambitious:[`Votre Majesté... j'espère que mes récents services ont été remarqués à leur juste valeur.`,
+             `Auguste Souverain. Certaines récompenses semblent en suspens, mais je reste naturellement à vos ordres.`],
+  corrupt:[`Votre Majesté ! Quel honneur. J'espère que vos... arrangements habituels restent en vigueur.`,
+           `Sublime Seigneur. Ma discrétion est totale — et mes résultats parlent d'eux-mêmes.`],
+  scheming:[`Votre Majesté. Je dois vous avertir : des ennemis vous entourent. Je peux peut-être vous aider à les identifier.`,
+            `Auguste Fils du Ciel. J'ai des informations qui pourraient vous intéresser... à un certain prix.`],
+  fanatic:[`Votre Majesté ! La faction des lettrés vous est entièrement dévouée. Notre soutien est indéfectible.`,
+           `Que le Ciel vous guide. Vos ennemis sont nos ennemis — nous n'attendons que vos ordres.`],
+  pragmatic:[`Votre Majesté. Pragmatisme oblige : votre règne se porte bien si vous prenez les bonnes décisions. Je suis là pour ça.`,
+             `Sublime Seigneur. Les faits sont les faits. Que souhaitez-vous savoir ?`],
+};
+
+function getConvOpening(m){
+  const pool=CONV_OPENINGS[m.personality]||CONV_OPENINGS.loyal;
+  return pick(pool);
+}
+
+function getMinInfo(m,topic){
+  const willLie=(m.personality==='scheming'&&rnd()<.42)||(m.loyalty<32&&rnd()<.55);
+  const useful=m.competence>58&&m.loyalty>42;
+
+  if(topic==='treasury'){
+    if(willLie)return{text:`Les finances impériales sont parfaites, Majesté. N'écoutez pas les alarmistes — jaloux de votre prospérité.`,lie:true,useful:false};
+    if(useful)return{text:`La corruption détourne environ ${Math.round(G.corruption*2.5)} or par cycle fiscal. Une inspection des préfectures de ${G.provinces[0].name} récupérerait une partie significative. Mais certains fonctionnaires sont très bien protégés...`,lie:false,useful:true,eff:(g)=>{g.corruption=cl(g.corruption-4,0,100);}};
+    return{text:`Les finances suivent leur cours normal, Majesté. Rien de notable.`,lie:false,useful:false};
+  }
+  if(topic==='plots'){
+    const plotter=G.ministers.find(x=>x.id!==m.id&&x.plotTarget&&x.plotProg>15);
+    if(willLie&&plotter){
+      const innocent=pick(G.ministers.filter(x=>x.id!==m.id&&!x.plotTarget));
+      if(innocent)return{text:`Je dois vous révéler — avec douleur — que ${innocent.name} entretient des contacts secrets. Ses allées et venues nocturnes sont suspectes.`,lie:true,useful:false,about:innocent.id};
+    }
+    if(plotter&&m.loyalty>52){
+      return{text:`Votre Majesté, j'ai observé des comportements troublants de la part de ${plotter.name}. Ses réunions nocturnes, ses contacts inhabituels... ma conscience m'oblige à vous avertir.`,lie:false,useful:true,about:plotter.id};
+    }
+    return{text:`La cour me semble calme, Majesté. Si des complots existaient, votre serviteur en aurait eu vent.`,lie:!plotter,useful:false};
+  }
+  if(topic==='factions'){
+    if(willLie)return{text:`Toutes les factions vous soutiennent loyalement. Vos ennemis exagèrent les divisions.`,lie:true,useful:false};
+    const weak=G.factions.sort((a,b)=>a.appr-b.appr)[0];
+    if(useful)return{text:`Les ${weak.name} sont les plus agités — leur approbation n'est qu'à ${Math.round(weak.appr)}%. Une concession ciblée suffirait à les calmer. Mais leurs revendications ont un coût...`,lie:false,useful:true};
+    return{text:`Les factions s'équilibrent, Majesté. L'harmonie règne à la cour.`,lie:false,useful:false};
+  }
+  if(topic==='military'){
+    if(willLie)return{text:`Nos armées sont invincibles, Majesté. Toute menace sera écrasée.`,lie:true,useful:false};
+    if(useful&&m.skills.mil>50)return{text:`Nos flancs nord-ouest sont vulnérables. Si les Xiongnu attaquent en hiver, nos garnisons de ${G.provinces[0].name} ne tiendraient pas plus d'une saison. Un renforcement urgent s'impose.`,lie:false,useful:true};
+    return{text:`L'armée maintient ses positions. Aucun incident notable.`,lie:false,useful:false};
+  }
+  if(topic==='rivals'){
+    // Minister talks about another minister
+    const rivals=G.ministers.filter(x=>x.id!==m.id&&(m.relationships[x.id]||0)<-5).sort((a,b)=>m.relationships[a.id]-m.relationships[b.id]);
+    const rival=rivals[0];
+    if(!rival)return{text:`Je n'ai aucun différend notable avec mes collègues, Majesté.`,lie:false,useful:false};
+    if(willLie)return{text:`${rival.name} est tout à fait loyal, Majesté. Ses critiques contre moi sont injustes — jalousie pure.`,lie:true,useful:false};
+    const rel=m.relationships[rival.id]||0;
+    return{text:`Je dois vous confier, Majesté, que mes relations avec ${rival.name} sont... tendues. ${rel<-30?`Son comportement récent m'inspire de profondes inquiétudes. Il cherche à miner mon travail systématiquement.`:`Nous avons des visions différentes de l'intérêt impérial.`}`,lie:false,useful:true};
+  }
+  return{text:`Votre serviteur est toujours disponible pour tout ce dont l'Empire a besoin.`,lie:false,useful:false};
+}
+
+function startConv(mid){
+  const m=G.ministers.find(x=>x.id===mid);if(!m)return;
+  G.activeConv={mid,history:[]};
+  G.selMinister=mid;
+  renderCourtTab();
+}
+
+function convReply(choice){
+  const conv=G.activeConv;if(!conv)return;
+  const m=G.ministers.find(x=>x.id===conv.mid);if(!m)return;
+  if(G.actionsUsed>=G.maxActions){snotif('Limite d\'actions atteinte','bd');return;}
+  G.actionsUsed++;
+  let resp={text:'',lie:false,useful:false};
+  let loyDelta=0;
+
+  switch(choice){
+    case 'ask_treasury':
+      resp=getMinInfo(m,'treasury');
+      if(resp.useful&&resp.eff)resp.eff(G);
+      loyDelta=m.personality==='loyal'?2:-1;
+      break;
+    case 'ask_plots':
+      resp=getMinInfo(m,'plots');
+      if(resp.about){G.intelFeed.unshift({text:`${m.name} vous informe: ${resp.text}`,type:resp.lie?'lie':'truth',src:m.name,turn:G.turn,about:resp.about});updBadge();}
+      loyDelta=1;break;
+    case 'ask_factions':
+      resp=getMinInfo(m,'factions');loyDelta=1;break;
+    case 'ask_military':
+      resp=getMinInfo(m,'military');loyDelta=m.skills.mil>50?2:0;break;
+    case 'ask_rivals':
+      resp=getMinInfo(m,'rivals');loyDelta=m.personality==='scheming'?-1:1;break;
+    case 'bribe':
+      if(G.treasury<200){snotif('Trésor insuffisant','bd');return;}
+      G.treasury-=200;m.loyalty=cl(m.loyalty+18,0,100);m.favor=cl(m.favor+22,0,100);
+      resp={text:`Votre générosité me touche profondément, Majesté. ${m.personality==='scheming'?'Sachez que j\'ai plusieurs informations précieuses pour vous en échange...':'Ma loyauté n\'a pas de prix — mais vos présents l\'affirment agréablement.'}`,lie:m.personality==='scheming',useful:true};
+      loyDelta=18;break;
+    case 'threaten':
+      if(m.loyalty>65){m.loyalty=cl(m.loyalty-8,0,100);resp={text:`Je comprends, Majesté. Vos ordres seront exécutés. (Son regard se durcit imperceptiblement.)`,lie:false,useful:false};}
+      else{m.loyalty=cl(m.loyalty-18,0,100);m.suspicion=cl(m.suspicion+12,0,100);resp={text:`Oui, Majesté. Votre serviteur obéit. (Ses mains tremblent — de peur, ou de rage ?)`,lie:false,useful:false};}
+      loyDelta=-12;break;
+    case 'confide':
+      m.loyalty=cl(m.loyalty+5,0,100);
+      resp={text:`Votre Majesté m'honore de sa confiance. Je garderai ce secret sous peine de mort.`,lie:m.personality==='scheming'&&m.loyalty<52,useful:false};
+      if(m.personality==='scheming'&&m.loyalty<52){
+        const tgt=pick(G.ministers.filter(x=>x.id!==m.id));
+        if(tgt)G.intelFeed.unshift({text:`Test positif: ${m.name} a divulgué votre confidence à ${tgt.name}. Ce ministre n'est pas fiable.`,type:'truth',src:'Observation personnelle',turn:G.turn+1,about:m.id});
+        updBadge();
+      }
+      loyDelta=5;break;
+    case 'demote':
+      m.loyalty=cl(m.loyalty-12,0,100);m.competence=cl(m.competence-8,0,100);
+      resp={text:`Votre décision m'est connue, Majesté. Je l'accepte avec... résignation. (Sa gorge se serre.)`,lie:false,useful:false};
+      loyDelta=-12;break;
+  }
+  m.loyalty=cl(m.loyalty+loyDelta,0,100);
+  conv.history.push({who:m.name,text:resp.text,lie:resp.lie,useful:resp.useful});
+  conv.stage=(conv.stage||0)+1;
+  renderCourtTab();
+}
+
+function rewardMin(mid,amt){
+  const m=G.ministers.find(x=>x.id===mid);if(!m||G.treasury<amt){snotif('Trésor insuffisant','bd');return;}
+  G.treasury-=amt;m.loyalty=cl(m.loyalty+12,0,100);m.favor=cl(m.favor+15,0,100);
+  alog(`${m.name} récompensé (+12 loyauté)`,'gd');
+  G.activeConv=null;render();
+}
+
+function endConv(){G.activeConv=null;renderCourtTab();}
+
+// ===== COURT ACTIONS =====
+function orderSurveillance(mid){
+  const m=G.ministers.find(x=>x.id===mid);if(!m)return;
+  if(G.actionsUsed>=G.maxActions){snotif('Limite d\'actions atteinte','bd');return;}
+  G.actionsUsed++;
+  m.suspicion=cl(m.suspicion+28,0,100);
+  if(m.plotTarget){
+    const pt=PLOTS[m.plotTarget];
+    G.discoveredPlots.push(m.id+'_'+m.plotTarget);
+    G.intelFeed.unshift({text:`Surveillance de ${m.name} confirmée : complot "${pt?.label||'inconnu'}" en cours à ${Math.round(m.plotProg)}/${pt?.max||100}.`,type:'truth',src:'Réseau impérial',turn:G.turn,about:m.id});
+    alog(`Complot de ${m.name} découvert par surveillance !`,'pl');
+  }else{
+    G.intelFeed.unshift({text:`La surveillance de ${m.name} n'a rien révélé d'anormal pour l'instant.`,type:'rumor',src:'Agents impériaux',turn:G.turn,about:m.id});
+  }
+  updBadge();G.activeConv=null;renderCourtTab();
+}
+
+function confrontMinister(mid){
+  const m=G.ministers.find(x=>x.id===mid);if(!m)return;
+  if(G.actionsUsed>=G.maxActions){snotif('Limite d\'actions atteinte','bd');return;}
+  G.actionsUsed++;
+  if(m.plotTarget&&m.suspicion>38){
+    const pt=PLOTS[m.plotTarget];
+    openModal(`Confrontation : ${m.name}`,
+      `Vos espions vous ont fourni des preuves. Vous confrontez ${m.name} directement — son visage se décompose.\n\nComplot "${pt?.label||'inconnu'}" à ${Math.round(m.plotProg)}/${pt?.max||100}.`,
+      [
+        {l:'⚔️ Exécuter publiquement',fn:()=>{G.ministers=G.ministers.filter(x=>x.id!==mid);G.stability=cl(G.stability-10,0,100);G.factions.forEach(f=>{if(f.id===m.faction)f.appr=cl(f.appr-28,0,100);});alog(`${m.name} exécuté pour trahison`,'cr');closeModal();render();}},
+        {l:'🔒 Emprisonner secrètement',fn:()=>{m.plotTarget=null;m.plotProg=0;m.loyalty=cl(m.loyalty-28,0,100);m.suspicion=0;alog(`${m.name} emprisonné — complot interrompu`,'nt');closeModal();render();}},
+        {l:'🕊️ Pardonner avec conditions',fn:()=>{m.plotTarget=null;m.plotProg=0;m.loyalty=cl(m.loyalty+8,0,100);m.favor=cl(m.favor-22,0,100);alog(`${m.name} gracié sous conditions`,'nt');closeModal();render();}},
+        {l:'🕷️ Retourner en agent double',fn:()=>{m.plotTarget=null;m.plotProg=0;m.loyalty=cl(m.loyalty+5,0,100);G.intelFeed.unshift({text:`${m.name} est désormais votre agent double — infiltré dans sa faction.`,type:'truth',src:'Vous-même',turn:G.turn,about:m.id});alog(`${m.name} : agent double`,'gd');closeModal();render();}},
+      ]
+    );
+  }else{
+    m.loyalty=cl(m.loyalty-10,0,100);m.suspicion=cl(m.suspicion+8,0,100);
+    alog(`Confrontation sans preuve — ${m.name} nie et se vexe`,'bd');
+    G.intelFeed.unshift({text:`Confrontation mal étayée — ${m.name} dissimulera mieux désormais.`,type:'rumor',src:'Observateur',turn:G.turn,about:m.id});
+    updBadge();render();
+  }
+}
+
+function appeaseFaction(fid){
+  const f=G.factions.find(x=>x.id===fid);if(!f||!f.demand)return;
+  if(G.actionsUsed>=G.maxActions){snotif('Limite d\'actions atteinte','bd');return;}
+  const d=f.demand;
+  if(d.c.treasury&&G.treasury<d.c.treasury){snotif('Trésor insuffisant','bd');return;}
+  if(d.c.prestige&&G.prestige<d.c.prestige){snotif('Prestige insuffisant','bd');return;}
+  if(d.c.treasury)G.treasury-=d.c.treasury;
+  if(d.c.prestige)G.prestige-=d.c.prestige;
+  G.actionsUsed++;
+  d.fx(G);computeDeltas();render();snotif(`${f.name} satisfaits`,'gd');
+}
+
+function destabilizeFaction(fid){
+  const f=G.factions.find(x=>x.id===fid);if(!f)return;
+  if(G.actionsUsed>=G.maxActions){snotif('Limite d\'actions atteinte','bd');return;}
+  if(G.jade<15){snotif('Jade insuffisant','bd');return;}
+  G.jade-=15;G.actionsUsed++;
+  f.appr=cl(f.appr-18,0,100);
+  const rival=pick(G.factions.filter(x=>x.id!==fid));
+  rival.appr=cl(rival.appr+5,0,100);
+  G.intelFeed.unshift({text:`Rumeurs soigneusement cultivées sapent la réputation des ${f.name}.`,type:'truth',src:'Vous-même (secret)',turn:G.turn,about:null});
+  alog(`Faction ${f.name} déstabilisée`,'pl');updBadge();render();
+}
+
+function arrangeMariage(m1id,m2id){
+  const m1=G.ministers.find(x=>x.id===m1id);const m2=G.ministers.find(x=>x.id===m2id);
+  if(!m1||!m2||G.jade<15){snotif('Jade insuffisant','bd');return;}
+  G.jade-=15;
+  m1.relationships[m2id]=cl((m1.relationships[m2id]||0)+35,-100,100);
+  m2.relationships[m1id]=cl((m2.relationships[m1id]||0)+35,-100,100);
+  alog(`Alliance arrangée entre ${m1.name} et ${m2.name}`,'gd');render();
+}
+
+function dismissMin(mid){
+  const m=G.ministers.find(x=>x.id===mid);if(!m)return;
+  G.ministers=G.ministers.filter(x=>x.id!==mid);
+  G.stability=cl(G.stability-5,0,100);
+  const f=G.factions.find(x=>x.id===m.faction);if(f)f.appr=cl(f.appr-10,0,100);
+  alog(`${m.name} renvoyé`,'nt');G.selMinister=null;G.activeConv=null;render();
+}
+
+function executeMin(mid){
+  const m=G.ministers.find(x=>x.id===mid);if(!m)return;
+  G.ministers=G.ministers.filter(x=>x.id!==mid);
+  G.stability=cl(G.stability-15,0,100);G.prestige=cl(G.prestige-5,0,100);
+  G.factions.forEach(f=>{if(f.id===m.faction)f.appr=cl(f.appr-28,0,100);});
+  alog(`${m.name} exécuté — la cour tremble`,'cr');G.selMinister=null;G.activeConv=null;render();
+}
+
+function reassignMin(mid){
+  const m=G.ministers.find(x=>x.id===mid);if(!m)return;
+  openModal(`Réaffecter ${m.name}`,
+    `Choisissez une nouvelle mission pour ${m.name}.`,
+    [
+      {l:'🌏 Mission diplomatique (+dip, +rel. nations)',fn:()=>{m.skills.dip=cl(m.skills.dip+15,0,100);G.nations.forEach(n=>n.rel=cl(n.rel+3,0,100));alog(`${m.name} en mission diplomatique`,'gd');closeModal();render();}},
+      {l:'🔍 Inspection anti-corruption (−corruption)',fn:()=>{m.skills.admin=cl(m.skills.admin+8,0,100);G.corruption=cl(G.corruption-12,0,100);alog(`${m.name} lutte contre la corruption`,'gd');closeModal();render();}},
+      {l:'⚔️ Commandement militaire (+puissance)',fn:()=>{m.skills.mil=cl(m.skills.mil+15,0,100);G.militaryPower=cl(G.militaryPower+5,0,100);alog(`${m.name} aux armées`,'gd');closeModal();render();}},
+      {l:'📈 Supervision économique (+route comm.)',fn:()=>{m.skills.eco=cl(m.skills.eco+15,0,100);G.tradeRoutes++;alog(`${m.name} supervise l'économie`,'gd');closeModal();render();}},
+    ]
+  );
+}
+// ===== RESOURCE ENGINE =====
+function computeDeltas(){
+  let dT=0,dF=0;
+  G.provinces.forEach(p=>{dT+=p.tax*(1-G.corruption/200);});
+  dT+=G.tradeRoutes*40;
+  G.nations.filter(n=>n.vassal).forEach(n=>{dT+=n.wlth*2;});
+  dT-=G.armySize*0.8;dF-=G.armySize*0.5;
+  dF+=200+(G.irrigation/100)*300;dF-=G.population*5;
+  if(G.droughtActive)dF-=200;
+  if(G.plagueActive){dT-=100;dF-=100;}
+  if(G.rebellionActive){dT-=150;dF-=50;}
+  G.wars.forEach(()=>{dT-=80;dF-=40;});
+  G.dT=Math.round(dT);G.dF=Math.round(dF);
+}
+
+function driftIndicators(){
+  let sd=0;
+  if(G.happiness>70)sd+=2;if(G.happiness<40)sd-=3;
+  if(G.corruption>50)sd-=2;if(G.rebellionActive)sd-=5;
+  if(G.wars.length)sd-=2;if(G.courtIntrigueLevel>62)sd-=2;
+  G.stability=cl(G.stability+sd,0,100);
+  let md=0;
+  if(G.happiness>65)md+=1;if(G.happiness<35)md-=2;
+  if(G.droughtActive)md-=1;if(G.plagueActive)md-=2;
+  if(G.rebellionActive)md-=3;if(G.corruption>60)md-=2;
+  if(G.courtIntrigueLevel>72)md-=3;
+  G.mandate=cl(G.mandate+md,0,100);
+  let hd=0;
+  if(G.food>400)hd+=2;if(G.food<100)hd-=5;
+  if(G.treasury<0)hd-=3;
+  if(G.droughtActive)hd-=3;if(G.plagueActive)hd-=4;
+  G.happiness=cl(G.happiness+hd,0,100);
+  G.courtIntrigueLevel=cl(G.courtIntrigueLevel-2,0,100);
+}
+
+function processWars(){
+  G.wars=G.wars.filter(w=>{
+    const n=G.nations.find(x=>x.id===w.nid);if(!n)return false;
+    const roll=(G.militaryPower-n.pow)*0.3+rnd()*30-10;
+    w.prog=cl(w.prog+roll,0,100);
+    if(w.prog>=100){n.war=false;n.rel=cl(n.rel+20,0,100);G.prestige=cl(G.prestige+20,0,100);G.mandate=cl(G.mandate+5,0,100);alog(`Victoire contre ${n.name}!`,'gd');return false;}
+    if(w.prog<=0){n.war=false;G.stability=cl(G.stability-20,0,100);G.mandate=cl(G.mandate-15,0,100);G.armySize=cl(G.armySize-30,20,9999);alog(`Défaite contre ${n.name}`,'bd');return false;}
+    return true;
+  });
+}
+
+function endTurn(){
+  if(G.pendingEvents.length>0){snotif('Résolvez d\'abord les événements !','bd');switchTab('events');return;}
+  G.turn++;G.actionsUsed=0;
+  computeDeltas();
+  G.treasury=Math.round(G.treasury+G.dT);G.food=Math.round(G.food+G.dF);
+  driftIndicators();processMinisters();processWars();
+
+  G.provinces.forEach(p=>{
+    if(G.happiness<40)p.unrest=cl(p.unrest+5,0,100);
+    if(G.happiness>70)p.unrest=cl(p.unrest-3,0,100);
+    if(p.unrest>60)p.loyalty=cl(p.loyalty-5,0,100);
+    p.loyalty=cl(p.loyalty+(G.stability-50)*0.05,0,100);
+  });
+
+  Object.keys(G.decreeTurns).forEach(id=>{
+    if(G.decreeTurns[id]<=G.turn){G.activeDecrees=G.activeDecrees.filter(x=>x!==id);delete G.decreeTurns[id];}
+  });
+
+  if(G.droughtActive&&rnd()<.35){G.droughtActive=false;alog('Sécheresse terminée','gd');}
+  if(G.plagueActive&&rnd()<.3){G.plagueActive=false;alog('Épidémie éteinte','gd');}
+
+  if(G.food>300&&G.happiness>50)G.population=Math.min(120,G.population+0.3);
+  if(G.food<100)G.population=Math.max(5,G.population-1);
+  if(G.plagueActive)G.population=Math.max(5,G.population-2);
+
+  G.nations.forEach(n=>{
+    if(n.rel<20&&!n.war&&!G.wars.find(w=>w.nid===n.id)&&rnd()<.2)trigWar(n,G);
+    if(n.rel>50&&rnd()<.1)n.rel=cl(n.rel-1,0,100);
+    if(n.rel<50&&rnd()<.08)n.rel=cl(n.rel+1,0,100);
+  });
+
+  const pool=EVENTS.filter(e=>e.cond(G));
+  const cnt=Math.min(pool.length,1+Math.floor(rnd()*2));
+  const picked=pool.sort(()=>rnd()-.5).slice(0,cnt);
+  picked.forEach(e=>{if(e.onAct)e.onAct(G);});
+  G.pendingEvents=picked.map(e=>({...e}));
+
+  alog(`Année ${G.turn} commence`,'nt');
+  document.getElementById('emer').textContent=`Année ${G.turn} — ${G.eraName}`;
+  checkGameOver();computeDeltas();render();switchTab('events');
+  snotif(`Année ${G.turn} — Que le Ciel guide votre règne`,'nt');updBadge();
+}
+
+function checkGameOver(){
+  if(G.mandate<=0)return gameOver('Le Mandat du Ciel vous est retiré. Des prétendants émergent de toutes les provinces.');
+  if(G.stability<=0)return gameOver('L\'Empire se fragmente. Chaque province fait sécession. La Chine n\'est plus.');
+  if(G.treasury<-500)return gameOver('La faillite de l\'État paralyse l\'administration. Les soldats se mutinent.');
+  if(G.food<-200)return gameOver('La grande famine emporte des millions d\'âmes. Votre règne s\'achève dans la honte.');
+  if(G.population<=5)return gameOver('Épidémies, famines et guerres ont décimé l\'Empire.');
+  if(G.ministers.length===0&&G.turn>3)return gameOver('Sans ministres, l\'Empire se désagrège.');
+  const coup=G.ministers.find(m=>m.plotTarget==='faction_coup'&&m.plotProg>=100);
+  if(coup)return gameOver(`${coup.name} a réussi son coup d'État. La cour s'est retournée contre vous.`);
+}
+function gameOver(r){document.getElementById('gor').textContent=r;document.getElementById('goy').textContent=`Règne de ${G.turn-1} années — ${G.eraName}`;document.getElementById('go').classList.add('open');}
+
+// ===== RENDER =====
+function render(){
+  renderTopBar();renderLeft();renderResources();renderIndicators();renderStats();renderEvents();
+  renderMilitary();renderEconomy();renderDecrees();renderLog();
+  if(document.getElementById('tab-court').classList.contains('act'))renderCourtTab();
+  if(document.getElementById('tab-map').classList.contains('act')){renderMap();renderNations();}
+}
+
+function renderTopBar(){
+  document.getElementById('tbt').textContent=`Imp. ${G.emperorName} — ${G.eraName}`;
+  document.getElementById('yr').textContent=`Année ${G.turn}`;
+  const s=(id,val,d,w)=>{document.getElementById('cv'+id).textContent=val;document.getElementById('ch'+id).className='chip '+(d?'dng':w?'wrn':'gd');};
+  s('t',G.treasury.toLocaleString(),G.treasury<100,G.treasury<300);
+  s('f',G.food.toLocaleString(),G.food<100,G.food<250);
+  s('p',G.population.toFixed(1)+'M',G.population<10,G.population<20);
+  s('a',G.armySize+'k',G.armySize<50,G.armySize<80);
+  s('s',G.stability+'%',G.stability<30,G.stability<55);
+  s('m',G.mandate+'%',G.mandate<30,G.mandate<55);
+}
+
+function renderLeft(){
+  document.getElementById('mlist').innerHTML=G.ministers.map(m=>{
+    const lc=m.loyalty>65?'loy':m.loyalty>35?'wav':'tra';
+    const ll=m.loyalty>65?'Loyal':m.loyalty>35?'Hésitant':'Traître';
+    const lcolor=m.loyalty>65?'#52b788':m.loyalty>35?'#f0c040':'#e74c3c';
+    const plotting=m.plotTarget&&m.suspicion>20;
+    const sel=G.selMinister===m.id;
+    const pt=PTYPES[m.personality];
+    return `<div class="mcard${plotting?' plotting':''}${sel?' selm':''}" onclick="selMin('${m.id}')">
+      ${plotting?'<div class="pring"></div>':''}
+      <div class="mn">${m.emoji} ${m.name}</div>
+      <div class="mr">${m.role}</div>
+      ${pt?`<div class="mr" style="color:${pt.color}">${pt.label}</div>`:''}
+      <div class="lbar"><div class="lfill" style="width:${m.loyalty}%;background:${lcolor}"></div></div>
+      <div class="mst"><span>Adm:<b>${m.skills.admin}</b></span><span>Mil:<b>${m.skills.mil}</b></span><span>Éco:<b>${m.skills.eco}</b></span><span>Dip:<b>${m.skills.dip}</b></span></div>
+      <span class="mbadge ${lc}">${ll}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('flist').innerHTML=G.factions.map(f=>{
+    const c=f.appr>60?'#52b788':f.appr>35?'#f0c040':'#e74c3c';
+    return `<div class="fb"><div class="fl"><span>${f.emoji} ${f.name}</span><span style="color:${c}">${Math.round(f.appr)}%</span></div>
+      <div class="ft"><div class="ff" style="width:${f.appr}%;background:${c}"></div></div></div>`;
+  }).join('');
+
+  const alerts=[];
+  if(G.mandate<30)alerts.push({t:'⚠️ Mandat critique',c:'#e74c3c'});
+  if(G.stability<30)alerts.push({t:'⚠️ Stabilité critique',c:'#e74c3c'});
+  if(G.treasury<0)alerts.push({t:'💸 Trésor vide',c:'#e74c3c'});
+  if(G.food<100)alerts.push({t:'🌾 Famine imminente',c:'#f39c12'});
+  if(G.rebellionActive)alerts.push({t:'⚔️ Rébellion',c:'#e74c3c'});
+  if(G.droughtActive)alerts.push({t:'☀️ Sécheresse',c:'#f39c12'});
+  if(G.plagueActive)alerts.push({t:'☠️ Épidémie',c:'#e74c3c'});
+  G.wars.forEach(w=>{const n=G.nations.find(x=>x.id===w.nid);if(n)alerts.push({t:`⚔️ Guerre: ${n.name}`,c:'#e74c3c'});});
+  G.ministers.filter(m=>m.plotTarget&&m.suspicion>20).forEach(m=>alerts.push({t:`🕷️ Complot: ${m.name}`,c:'#9b59b6'}));
+  if(G.courtIntrigueLevel>62)alerts.push({t:`🕵️ Intrigues: ${Math.round(G.courtIntrigueLevel)}%`,c:'#9b59b6'});
+  document.getElementById('alist').innerHTML=alerts.length?
+    alerts.map(a=>`<div style="font-size:.69rem;color:${a.c};padding:.18rem 0;border-bottom:1px solid #1a1008;">${a.t}</div>`).join(''):
+    `<div style="font-size:.67rem;color:var(--smk);font-style:italic;">Aucune alerte</div>`;
+}
+
+function selMin(id){G.selMinister=id;G.activeConv=null;renderLeft();switchTab('court');renderCourtTab();}
+
+// ===== COURT TAB =====
+function renderCourtTab(){
+  const c=document.getElementById('courtcon');
+  const sel=G.selMinister?G.ministers.find(m=>m.id===G.selMinister):null;
+  if(G.activeConv&&sel){renderConversation(c,sel);return;}
+
+  let h=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;">`;
+
+  // LEFT: minister detail or pick prompt
+  h+=`<div>`;
+  if(sel){h+=renderMinDet(sel);}
+  else{h+=`<div class="csec"><h4>Sélectionnez un ministre</h4><p style="font-size:.75rem;color:var(--smk);font-style:italic;">Cliquez sur un ministre dans le panneau gauche pour interagir avec lui.</p></div>`;}
+
+  // Factions
+  h+=`<div class="csec" style="margin-top:.7rem;"><h4>Factions &amp; Agendas</h4>`;
+  G.factions.forEach(f=>{
+    const c2=f.appr>60?'#52b788':f.appr>35?'#f0c040':'#e74c3c';
+    const members=G.ministers.filter(m=>m.faction===f.id);
+    h+=`<div class="facdet">
+      <h4><span>${f.emoji} ${f.name}</span><span style="color:${c2}">${Math.round(f.appr)}%</span></h4>
+      <p>${f.agenda}</p>
+      <div style="font-size:.66rem;color:var(--smk);margin-bottom:.3rem;">Membres : ${members.map(m=>`${m.emoji}${m.name.split(' ')[0]}`).join(', ')||'—'}</div>
+      <div class="facacts">
+        ${f.demand?`<button class="fabtn" onclick="appeaseFaction('${f.id}')">${f.demand.l}</button>`:''}
+        <button class="fabtn" onclick="destabilizeFaction('${f.id}')">🕸️ Déstabiliser (−15 jade)</button>
+      </div>
+    </div>`;
+  });
+  h+=`</div></div>`;
+
+  // RIGHT: intel + plots + relationships
+  h+=`<div>`;
+
+  // Active detected plots
+  const kp=G.ministers.filter(m=>m.plotTarget&&(m.suspicion>18||G.discoveredPlots.some(d=>d.startsWith(m.id))));
+  if(kp.length){
+    h+=`<div class="csec" style="margin-bottom:.7rem;"><h4>🕷️ Complots Détectés</h4>`;
+    kp.forEach(m=>{
+      const pt=PLOTS[m.plotTarget];if(!pt)return;
+      const pct=Math.min(100,(m.plotProg/pt.max)*100);
+      h+=`<div class="pcard">
+        <div class="pt">${m.emoji} ${m.name} — ${pt.label}</div>
+        <div class="px">${pt.desc}</div>
+        <div class="ppbar"><div class="ppfill" style="width:${pct}%"></div></div>
+        <div style="font-size:.62rem;color:var(--smk);margin-bottom:.28rem;">Progression: ${Math.round(m.plotProg)}/${pt.max} | Suspicion: ${Math.round(m.suspicion)}%</div>
+        <div class="pacts">
+          <button class="pab" onclick="confrontMinister('${m.id}')">⚔️ Confronter</button>
+          <button class="pab" onclick="orderSurveillance('${m.id}')">👁️ Surveiller</button>
+          ${m.suspicion>55?`<button class="pab red" onclick="executeMin('${m.id}')">☠️ Éliminer</button>`:''}
+        </div>
+      </div>`;
+    });
+    h+=`</div>`;
+  }
+
+  // Intel feed
+  const al=G.maxActions-G.actionsUsed;
+  h+=`<div class="csec"><h4>📜 Flux d'Informations <span style="font-size:.6rem;color:var(--smk)">[${al} action${al!==1?'s':''} restante${al!==1?'s':''}]</span></h4>`;
+  if(G.intelFeed.length===0){
+    h+=`<div class="empty" style="padding:.8rem">Aucune info. Interrogez vos ministres ou activez un réseau d'espions.</div>`;
+  }else{
+    h+=G.intelFeed.slice(0,14).map(i=>{
+      i.read=true;
+      const ab=i.about?G.ministers.find(m=>m.id===i.about):null;
+      const tag=i.type==='truth'?`<span class="ctag ctag-t">Vérifié</span>`:
+                i.type==='lie'?`<span class="ctag ctag-l">Mensonge</span>`:
+                i.type==='plot'?`<span class="ctag" style="background:rgba(108,52,131,.4);color:#d7a8e8">Complot</span>`:
+                `<span class="ctag ctag-r">Rumeur</span>`;
+      return `<div class="ientry ${i.type}">
+        <span class="iage">An ${i.turn}</span>
+        ${i.text}
+        ${ab?`<div class="isrc">Concerne : ${ab.emoji} ${ab.name}</div>`:''}
+        <div class="isrc">Source : ${i.src} ${tag}</div>
+      </div>`;
+    }).join('');
+  }
+  h+=`</div>`;
+
+  // Relationship web
+  if(sel&&G.ministers.length>1){
+    h+=`<div class="csec" style="margin-top:.7rem;"><h4>🕸️ Relations de ${sel.name.split(' ')[0]}</h4>`;
+    G.ministers.filter(m=>m.id!==sel.id).forEach(o=>{
+      const val=sel.relationships[o.id]||0;
+      const color=val>20?'#52b788':val>-20?'#f0c040':'#e74c3c';
+      const label=val>50?'Allié':val>20?'Ami':val>-20?'Neutre':val>-50?'Rival':'Ennemi';
+      h+=`<div class="rship">
+        <span class="rname">${o.emoji} ${o.name.split(' ')[0]}</span>
+        <div class="rbar2"><div class="rbf" style="width:${((val+100)/2)}%;background:${color}"></div></div>
+        <span class="rlab" style="color:${color}">${label}</span>
+        <button style="font-size:.58rem;background:none;border:1px solid #3a2010;color:var(--smk);cursor:pointer;padding:1px 4px;margin-left:.28rem;transition:all .2s;" onmouseover="this.style.borderColor='var(--gdd)'" onmouseout="this.style.borderColor='#3a2010'" onclick="arrangeMariage('${sel.id}','${o.id}')">💍</button>
+      </div>`;
+    });
+    h+=`</div>`;
+  }
+  h+=`</div></div>`;
+  c.innerHTML=h;
+}
+
+function renderMinDet(m){
+  const pt=PTYPES[m.personality];
+  const lc=m.loyalty>65?'#52b788':m.loyalty>35?'#f0c040':'#e74c3c';
+  const posT=(m.traits||[]).filter(t=>TPOS.includes(t));
+  const negT=(m.traits||[]).filter(t=>TNEG.includes(t));
+  const al=G.maxActions-G.actionsUsed;
+  const others=G.ministers.filter(x=>x.id!==m.id);
+  const o2=others[0];
+  return `<div class="mdet">
+    <div class="mdethdr">
+      <div class="mdetav">${m.emoji}</div>
+      <div><div class="mdetnm">${m.name}</div><div class="mdetrl">${m.role}</div>
+        ${pt?`<div class="mdetfc" style="background:rgba(0,0,0,.3);color:${pt.color};">${pt.label}</div>`:''}
+      </div>
+    </div>
+    <div style="font-size:.7rem;color:var(--pchd);font-style:italic;line-height:1.65;margin-bottom:.45rem;">${m.desc}</div>
+    <div class="trow">
+      ${posT.map(t=>`<span class="trait pos">${t}</span>`).join('')}
+      ${negT.map(t=>`<span class="trait neg">${t}</span>`).join('')}
+    </div>
+    <div class="rgrid">
+      <div class="ritem"><div class="rk">Loyauté</div><div class="rv2" style="color:${lc}">${Math.round(m.loyalty)}/100</div></div>
+      <div class="ritem"><div class="rk">Faveur impériale</div><div class="rv2">${Math.round(m.favor)}/100</div></div>
+      <div class="ritem"><div class="rk">Corruption</div><div class="rv2" style="color:${m.corruption>50?'#e74c3c':'var(--gdl)'}">${m.corruption}%</div></div>
+      <div class="ritem"><div class="rk">Suspicion</div><div class="rv2" style="color:${m.suspicion>40?'#e74c3c':m.suspicion>20?'#f0c040':'var(--gdl)'}">${Math.round(m.suspicion)}%</div></div>
+    </div>
+    <div style="font-size:.64rem;color:var(--smk);margin:.3rem 0;">Actions restantes : <span style="color:${al>0?'var(--gdl)':'#e74c3c'}">${al}/${G.maxActions}</span></div>
+    <div class="cacts">
+      <button class="cab" onclick="startConv('${m.id}')" ${al<=0?'disabled':''}>💬 Convoquer en audience</button>
+      <button class="cab pur" onclick="orderSurveillance('${m.id}')" ${al<=0?'disabled':''}>👁️ Surveiller secrètement</button>
+      <button class="cab" onclick="rewardMin('${m.id}',100)" ${G.treasury<100?'disabled':''}>🎁 Récompenser (−100 or)</button>
+      <button class="cab" onclick="reassignMin('${m.id}')">📋 Réaffecter</button>
+      ${o2?`<button class="cab" onclick="arrangeMariage('${m.id}','${o2.id}')">💍 Marier dynastique</button>`:''}
+      ${m.suspicion>38?`<button class="cab dng" onclick="confrontMinister('${m.id}')" ${al<=0?'disabled':''}>⚔️ Confronter (complot)</button>`:''}
+      <button class="cab dng" onclick="dismissMin('${m.id}')">🚫 Renvoyer</button>
+      ${m.loyalty<35?`<button class="cab dng" onclick="executeMin('${m.id}')">☠️ Exécuter</button>`:''}
+    </div>
+  </div>`;
+}
+
+function renderConversation(c,m){
+  const conv=G.activeConv;
+  const op=conv.history.length===0?getConvOpening(m):'';
+  const al=G.maxActions-G.actionsUsed;
+  let h=`<div style="max-width:620px;">
+    <div style="font-family:'Cinzel',serif;font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gdd);margin-bottom:.55rem;display:flex;align-items:center;justify-content:space-between;">
+      <span>Audience avec ${m.emoji} ${m.name}</span>
+      <span style="color:${al>0?'var(--gdl)':'#e74c3c'}">${al} action${al!==1?'s':''} restante${al!==1?'s':''}</span>
+    </div>`;
+
+  if(op){
+    const pt=PTYPES[m.personality];
+    h+=`<div class="cbub"><div class="cbwho">${m.emoji} ${m.name} ${pt?`<span style="font-size:.6rem;color:${pt.color};font-style:italic;">${pt.label}</span>`:''}</div>"${op}"</div>`;
+  }
+
+  conv.history.forEach(e=>{
+    const tag=e.lie?`<span class="ctag ctag-l">Mensonge probable</span>`:
+              e.useful?`<span class="ctag ctag-t">Info utile</span>`:
+              `<span class="ctag ctag-r">Vague</span>`;
+    h+=`<div class="cbub"><div class="cbwho">${m.emoji} ${e.who} ${tag}</div>"${e.text}"</div>`;
+  });
+
+  if(al<=0){
+    h+=`<div style="font-size:.74rem;color:#e74c3c;font-style:italic;margin:.4rem 0;">Limite d'actions atteinte pour ce tour.</div>
+    <button class="crbtn" onclick="endConv()">Clore l'audience</button>`;
+  }else{
+    h+=`<div class="creplies">
+      <button class="crbtn" onclick="convReply('ask_treasury')">💰 Situation des finances ?</button>
+      <button class="crbtn" onclick="convReply('ask_plots')">🕵️ Y a-t-il des complots ?</button>
+      <button class="crbtn" onclick="convReply('ask_factions')">⚖️ Tensions entre factions ?</button>
+      <button class="crbtn" onclick="convReply('ask_military')">⚔️ État des armées ?</button>
+      <button class="crbtn" onclick="convReply('ask_rivals')">👥 Relations avec vos rivaux ?</button>
+      <button class="crbtn" onclick="convReply('bribe')">🎁 Soudoyer (−200 or)</button>
+      <button class="crbtn" onclick="convReply('threaten')">⚠️ Menacer</button>
+      <button class="crbtn" onclick="convReply('confide')">🤫 Lui confier un secret (test)</button>
+      <button class="crbtn" style="border-color:var(--smk);" onclick="endConv()">Congédier</button>
+    </div>`;
+  }
+  h+=`</div>`;c.innerHTML=h;
+}
+// ===== MAP =====
+function getRC(rel,war){if(war)return'#cc0000';if(rel>=75)return'#2d6a4f';if(rel>=60)return'#52b788';if(rel>=45)return'#8b8b20';if(rel>=30)return'#b06820';return'#8b1a1a';}
+function getRF(rel,war){if(war)return'rgba(200,0,0,.55)';if(rel>=75)return'rgba(45,106,79,.45)';if(rel>=60)return'rgba(82,183,136,.3)';if(rel>=45)return'rgba(100,100,30,.35)';if(rel>=30)return'rgba(139,80,20,.35)';return'rgba(139,26,26,.45)';}
+
+function renderMap(){
+  const svg=document.getElementById('wmap');
+  let h=`<defs><pattern id="op" patternUnits="userSpaceOnUse" width="20" height="20"><rect width="20" height="20" fill="#0a1820"/><path d="M0,10 Q5,8 10,10 Q15,12 20,10" stroke="#0d2030" stroke-width=".5" fill="none"/></pattern></defs>
+    <rect width="800" height="500" fill="url(#op)"/>
+    <path d="M200,195 Q290,175 375,165 Q425,165 462,208" stroke="#c9a84c22" stroke-width="2" stroke-dasharray="8,6" fill="none"/>
+    <path d="M600,178 Q635,198 655,250 Q645,308 625,340" stroke="#3498db22" stroke-width="2" stroke-dasharray="6,5" fill="none"/>`;
+
+  MREGIONS.forEach(r=>{
+    if(r.t==='sea'){h+=`<ellipse cx="${r.cx}" cy="${r.cy}" rx="${r.rx}" ry="${r.ry}" fill="rgba(20,60,100,.3)" stroke="#1a4060" stroke-width=".5"/><text x="${r.cx}" y="${r.cy+4}" text-anchor="middle" fill="#3a7090" font-size="9" font-family="serif" font-style="italic">${r.l}</text>`;return;}
+    if(r.t==='geo'){h+=`<ellipse cx="${r.cx}" cy="${r.cy}" rx="${r.rx}" ry="${r.ry}" fill="rgba(80,60,30,.3)" stroke="#5a4020" stroke-width=".5"/><text x="${r.cx}" y="${r.cy+3}" text-anchor="middle" fill="#6a5030" font-size="8" font-family="serif" font-style="italic">${r.l}</text>`;return;}
+    if(r.t==='china'){h+=`<ellipse cx="${r.cx}" cy="${r.cy}" rx="${r.rx}" ry="${r.ry}" fill="rgba(180,120,30,.2)" stroke="#8b6914" stroke-width="1.5"/><text x="${r.cx}" y="${r.cy-4}" text-anchor="middle" fill="#c9a84c" font-size="11" font-family="serif" font-weight="bold">${r.l}</text><text x="${r.cx}" y="${r.cy+8}" text-anchor="middle" fill="#8b6914" font-size="8" font-family="serif" font-style="italic">Province impériale</text>`;return;}
+    const n=G.nations.find(x=>x.id===r.nid);if(!n)return;
+    const war=G.wars.find(w=>w.nid===n.id);
+    const fill=getRF(n.rel,!!war);const stroke=getRC(n.rel,!!war);
+    const sel=G.selNation===n.id;
+    const sw=sel?`stroke-width="2.5" stroke="#e8d08a"`:`stroke-width="1" stroke="${stroke}"`;
+    h+=`<g style="cursor:pointer" class="${war?'wpp':''}" onclick="selNat('${n.id}')">
+      <ellipse cx="${r.cx}" cy="${r.cy}" rx="${r.rx}" ry="${r.ry}" fill="${fill}" ${sw}/>
+      <text x="${r.cx}" y="${r.cy-5}" text-anchor="middle" fill="#e8d4a0" font-size="10" font-family="serif" font-weight="bold">${n.emoji} ${r.l}</text>
+      <text x="${r.cx}" y="${r.cy+7}" text-anchor="middle" fill="${stroke}" font-size="8" font-family="serif">${war?'⚔️ GUERRE':n.vassal?'👑 Vassal':n.ally?'🤝 Allié':''}</text>
+      <text x="${r.cx}" y="${r.cy+17}" text-anchor="middle" fill="${stroke}" font-size="8" font-family="serif">${n.rel}/100</text>
+    </g>`;
+    if(war){const bw=r.rx*1.5;const bx=r.cx-bw/2;const by=r.cy+r.ry+4;h+=`<rect x="${bx}" y="${by}" width="${bw}" height="4" fill="#2a0505" rx="2"/><rect x="${bx}" y="${by}" width="${bw*war.prog/100}" height="4" fill="${war.prog>60?'#52b788':'#e74c3c'}" rx="2"/>`;}
+  });
+  h+=`<g><circle cx="462" cy="225" r="7" fill="#c9a84c" stroke="#8b6914" stroke-width="1.5"/><text x="462" y="229" text-anchor="middle" fill="#1a0f08" font-size="9" font-family="serif" font-weight="bold">京</text></g>`;
+  svg.innerHTML=h;
+
+  const tt=document.getElementById('mtt');
+  svg.querySelectorAll('g[onclick]').forEach(el=>{
+    el.addEventListener('mousemove',e=>{
+      const nid=el.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+      const n=G.nations.find(x=>x.id===nid);if(!n)return;
+      const war=G.wars.find(w=>w.nid===n.id);
+      tt.innerHTML=`<strong>${n.emoji} ${n.fn}</strong><br>Relations: ${n.rel} | Puissance: ${n.pow}<br>${war?`⚔️ Guerre — ${Math.round(war.prog)}%`:n.vassal?'👑 Vassal':n.ally?'🤝 Allié':'Indépendant'}`;
+      tt.style.display='block';
+      const rect=document.getElementById('mapwrap').getBoundingClientRect();
+      tt.style.left=(e.clientX-rect.left+10)+'px';tt.style.top=(e.clientY-rect.top+10)+'px';
+    });
+    el.addEventListener('mouseleave',()=>{tt.style.display='none';});
+  });
+}
+
+function selNat(id){G.selNation=id;renderMap();renderNations();switchTab('map');}
+
+function getRLabel(n){
+  const w=G.wars.find(x=>x.nid===n.id);
+  if(w)return`<span class="rli rlw">⚔️ GUERRE</span>`;
+  if(n.rel>=75)return`<span class="rli rla">Allié</span>`;
+  if(n.rel>=60)return`<span class="rli rlf">Ami</span>`;
+  if(n.rel>=45)return`<span class="rli rln">Neutre</span>`;
+  if(n.rel>=30)return`<span class="rli rlt">Tendu</span>`;
+  return`<span class="rli rlh">Hostile</span>`;
+}
+
+function renderNations(){
+  document.getElementById('nlist').innerHTML=G.nations.map(n=>{
+    const sel=G.selNation===n.id;
+    const rc=getRC(n.rel,!!G.wars.find(w=>w.nid===n.id));
+    const war=G.wars.find(w=>w.nid===n.id);
+    const acts=sel?(n.dact||[]).map(aid=>{
+      const a=DDEFS[aid];if(!a)return'';
+      const ok=Object.entries(a.cost||{}).every(([k,v])=>G[k]>=v);
+      return`<button class="na" onclick="doDip('${n.id}','${aid}')" ${ok?'':'disabled style="opacity:.35;cursor:not-allowed"'}>${a.l}</button>`;
+    }).join(''):'' ;
+    const warH=war?`<div class="wbar"><div class="wfill ${war.prog>60?'win':''}" style="width:${war.prog}%"></div></div>
+      <div class="wlabs"><span>Défaite</span><span>${Math.round(war.prog)}%</span><span>Victoire</span></div>
+      <div class="ech" style="margin-top:.35rem;">
+        <button class="ecb" onclick="warAct('push','${n.id}')">⚔️ Offensive (−250 or)</button>
+        <button class="ecb" onclick="warAct('defend','${n.id}')">🛡️ Défense (−80 or)</button>
+        <button class="ecb" onclick="warAct('sue','${n.id}')">🕊️ Paix (−prestige)</button>
+      </div>`:'';
+    return`<div class="ncd${sel?' sel':''}" onclick="selNat('${n.id}')">
+      <div class="ncdh"><span>${n.emoji}</span><span>${n.name}</span><span style="margin-left:auto">${getRLabel(n)}</span></div>
+      <div class="ncdb">
+        <div style="font-size:.67rem;color:var(--smk);font-style:italic;margin-bottom:.3rem;">${n.desc}</div>
+        <div style="height:4px;background:#2a1510;border-radius:2px;overflow:hidden;margin:.22rem 0;"><div style="height:100%;width:${n.rel}%;background:${rc};border-radius:2px;transition:width .5s"></div></div>
+        <div style="font-size:.63rem;color:var(--smk);margin-bottom:.3rem;">Puissance: ${n.pow} | Richesse: ${n.wlth} | Pop: ${n.pop}M</div>
+        ${warH}<div class="nacts">${acts}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function doDip(nid,aid){
+  const n=G.nations.find(x=>x.id===nid);const a=DDEFS[aid];if(!n||!a)return;
+  for(const[k,v] of Object.entries(a.cost||{})){if(G[k]<v){snotif(`Insuffisant: ${k}`,'bd');return;}G[k]-=v;}
+  a.fx(n,G);computeDeltas();render();
+}
+
+function warAct(type,nid){
+  const n=G.nations.find(x=>x.id===nid);const w=G.wars.find(x=>x.nid===nid);if(!n||!w)return;
+  if(type==='push'){if(G.treasury<250){snotif('Trésor insuffisant','bd');return;}G.treasury-=250;w.prog=cl(w.prog+(G.militaryPower>n.pow?26:13),0,100);}
+  else if(type==='defend'){if(G.treasury<80){snotif('Trésor insuffisant','bd');return;}G.treasury-=80;alog(`Défense contre ${n.name}`,'nt');}
+  else if(type==='sue'){G.prestige=cl(G.prestige-22,0,100);n.war=false;G.wars=G.wars.filter(x=>x.nid!==nid);alog(`Paix avec ${n.name}`,'nt');}
+  if(w&&w.prog>=100){n.war=false;G.wars=G.wars.filter(x=>x.nid!==nid);G.prestige=cl(G.prestige+20,0,100);alog(`Victoire: ${n.name}!`,'gd');snotif(`Victoire!`,'gd');}
+  computeDeltas();render();
+}
+
+// ===== MILITARY =====
+function renderMilitary(){
+  const wars=G.wars.map(w=>{
+    const n=G.nations.find(x=>x.id===w.nid);if(!n)return'';
+    return`<div class="ec war" style="margin-bottom:.7rem;">
+      <div class="etl">⚔️ Guerre : ${n.emoji} ${n.name}</div>
+      <div class="etx">Vous: ${G.militaryPower} vs ${n.name}: ${n.pow}</div>
+      <div class="wbar"><div class="wfill ${w.prog>60?'win':''}" style="width:${w.prog}%"></div></div>
+      <div class="wlabs"><span>Défaite</span><span>${Math.round(w.prog)}%</span><span>Victoire</span></div>
+      <div class="ech" style="margin-top:.4rem;">
+        <button class="ecb" onclick="warAct('push','${n.id}')">⚔️ Offensive (−250 or)</button>
+        <button class="ecb" onclick="warAct('defend','${n.id}')">🛡️ Défense (−80 or)</button>
+        <button class="ecb" onclick="warAct('sue','${n.id}')">🕊️ Paix (−prestige)</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const provs=G.provinces.map(p=>`
+    <div class="pcd"><div class="pn">📍 ${p.name}</div>
+      <div class="mbar2"><span style="min-width:65px">Loyauté</span><div class="bt"><div class="bf bgg" style="width:${p.loyalty}%"></div></div><span>${Math.round(p.loyalty)}</span></div>
+      <div class="mbar2"><span style="min-width:65px">Troupes</span><div class="bt"><div class="bf brr" style="width:${Math.min(100,p.troops*2)}%"></div></div><span>${p.troops}k</span></div>
+      <div class="mbar2"><span style="min-width:65px">Vivres</span><div class="bt"><div class="bf bgr" style="width:${p.food}%"></div></div><span>${p.food}</span></div>
+      <div class="mbar2"><span style="min-width:65px">Mécontentement</span><div class="bt"><div class="bf brr" style="width:${p.unrest}%"></div></div><span>${p.unrest}</span></div>
+    </div>`).join('');
+
+  document.getElementById('milcon').innerHTML=`${wars||'<div class="empty" style="padding:.8rem">Aucune guerre en cours</div>'}
+    <div style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gdd);border-bottom:1px solid #3a2010;padding-bottom:.25rem;margin:.7rem 0 .45rem;">Actions Militaires</div>
+    <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.7rem;">
+      <button class="ecb" onclick="milAct('recruit')">📣 Recruter (+20k, −200 or)</button>
+      <button class="ecb" onclick="milAct('pay')">💰 Prime moral (−100 or)</button>
+      <button class="ecb" onclick="milAct('reform')">🏹 Réforme tactique (−150 or)</button>
+      <button class="ecb" onclick="milAct('fortify')">🏰 Fortifier (−200 or)</button>
+    </div>
+    <div style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gdd);border-bottom:1px solid #3a2010;padding-bottom:.25rem;margin-bottom:.45rem;">Provinces</div>
+    <div class="pgrid">${provs}</div>`;
+}
+function milAct(t){
+  switch(t){
+    case'recruit':if(G.treasury<200){snotif('Trésor insuffisant','bd');return;}G.treasury-=200;G.armySize+=20;alog('20k soldats recrutés','gd');break;
+    case'pay':if(G.treasury<100){snotif('Trésor insuffisant','bd');return;}G.treasury-=100;G.armyMorale=cl(G.armyMorale+15,0,100);alog('Prime versée','gd');break;
+    case'reform':if(G.treasury<150){snotif('Trésor insuffisant','bd');return;}G.treasury-=150;G.militaryPower=cl(G.militaryPower+8,0,100);alog('Réforme tactique','gd');break;
+    case'fortify':if(G.treasury<200){snotif('Trésor insuffisant','bd');return;}G.treasury-=200;G.provinces.forEach(p=>p.loyalty=cl(p.loyalty+5,0,100));alog('Provinces fortifiées','gd');break;
+  }
+  computeDeltas();render();
+}
+
+// ===== ECONOMY =====
+function renderEconomy(){
+  const pi=Math.round(G.provinces.reduce((s,p)=>s+p.tax*(1-G.corruption/200),0));
+  const ti=G.tradeRoutes*40;const vi=G.nations.filter(n=>n.vassal).reduce((s,n)=>s+n.wlth*2,0);
+  const ac=Math.round(G.armySize*0.8);const wc=G.wars.length*80;
+  document.getElementById('ecocon').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin-bottom:.7rem;">
+      <div class="rcd"><span class="rv" style="color:#52b788">+${pi+ti+vi}</span><span class="rl">Revenus/an</span></div>
+      <div class="rcd"><span class="rv" style="color:#e74c3c">−${ac+wc+50}</span><span class="rl">Dépenses/an</span></div>
+      <div class="rcd"><span class="rv">${G.corruption}%</span><span class="rl">Corruption</span></div>
+      <div class="rcd"><span class="rv">${G.tradeRoutes}</span><span class="rl">Routes comm.</span></div>
+    </div>
+    ${G.provinces.map(p=>`<div class="mbar2" style="margin:.32rem 0;"><span style="min-width:88px;font-size:.7rem;color:var(--pchd)">${p.name}</span><div class="bt" style="height:6px;"><div class="bf bgg" style="width:${(p.tax/200)*100}%"></div></div><span style="font-size:.68rem;color:var(--gdl);min-width:38px;text-align:right">${Math.round(p.tax*(1-G.corruption/200))}</span></div>`).join('')}
+    <div class="erow"><span class="ek">Commerce international</span><span class="ev">+${ti}</span></div>
+    <div class="erow"><span class="ek">Tributs vassaux</span><span class="ev">+${vi}</span></div>
+    <div class="erow"><span class="ek">Coût armée</span><span class="ev" style="color:#e74c3c">−${ac}</span></div>
+    <div class="erow" style="margin-bottom:.6rem;"><span class="ek">Coût guerres</span><span class="ev" style="color:#e74c3c">−${wc}</span></div>
+    <div class="eagrid">
+      <button class="eab" onclick="ecoAct('tax')">📈 Taxe accrue (+200 or, −bonheur)</button>
+      <button class="eab" onclick="ecoAct('agri')">🌾 Agriculture (−150 or, +irrigation)</button>
+      <button class="eab" onclick="ecoAct('market')">🏪 Marchés (−20 jade, +route)</button>
+      <button class="eab" onclick="ecoAct('purge')">🔍 Purge corruption (−200 or)</button>
+      <button class="eab dng" onclick="ecoAct('debase')">💀 Rogner pièces (DANGEREUX)</button>
+    </div>`;
+}
+function ecoAct(t){
+  switch(t){
+    case'tax':G.treasury+=200;G.happiness=cl(G.happiness-15,0,100);G.mandate=cl(G.mandate-5,0,100);alog('Taxe accrue','bd');break;
+    case'agri':if(G.treasury<150){snotif('Trésor insuffisant','bd');return;}G.treasury-=150;G.irrigation=cl(G.irrigation+10,0,100);G.happiness=cl(G.happiness+5,0,100);alog('Agriculture améliorée','gd');break;
+    case'market':if(G.jade<20){snotif('Jade insuffisant','bd');return;}G.jade-=20;G.tradeRoutes++;G.prestige=cl(G.prestige+5,0,100);alog('Nouveau marché','gd');break;
+    case'purge':if(G.treasury<200){snotif('Trésor insuffisant','bd');return;}G.treasury-=200;G.corruption=cl(G.corruption-20,0,100);G.stability=cl(G.stability+5,0,100);alog('Purge anti-corruption','gd');break;
+    case'debase':if(G.mandate<20){snotif('Mandat trop bas','bd');return;}G.treasury+=500;G.happiness=cl(G.happiness-25,0,100);G.mandate=cl(G.mandate-20,0,100);G.corruption+=15;alog('Rognage des pièces — crise','bd');break;
+  }
+  computeDeltas();render();
+}
+
+// ===== DECREES =====
+function renderDecrees(){
+  document.getElementById('deccon').innerHTML=DECREES.map(d=>{
+    const isA=G.activeDecrees.includes(d.id);
+    const ok=Object.entries(d.cost||{}).every(([k,v])=>G[k]>=v);
+    const cok=d.cond(G);
+    const cs=Object.entries(d.cost||{}).map(([k,v])=>`${v} ${k}`).join(', ');
+    const es=Object.entries(d.eff||{}).map(([k,v])=>`${v>0?'+':''}${v} ${k}`).join(', ');
+    return`<div class="dc${!ok||isA||!cok?' dis':''}${isA?' actd':''}" onclick="issueDecree('${d.id}')">
+      <div class="ddn">${d.emoji} ${d.name}</div><div class="ddd">${d.desc}</div>
+      <div class="ddc">Coût : ${cs}</div>${es?`<div class="dde">Effets : ${es}</div>`:''}
+      ${isA?'<div style="font-size:.63rem;color:var(--jadl);margin-top:.18rem;">✓ Actif</div>':''}
+    </div>`;
+  }).join('');
+}
+function issueDecree(id){
+  const d=DECREES.find(x=>x.id===id);if(!d||G.activeDecrees.includes(id))return;
+  if(!d.cond(G)){snotif('Conditions non remplies','bd');return;}
+  for(const[k,v] of Object.entries(d.cost||{})){if(G[k]<v){snotif(`Insuffisant: ${k}`,'bd');return;}}
+  for(const[k,v] of Object.entries(d.cost||{})){G[k]-=v;}
+  const e=d.eff||{};
+  ['tradeRoutes','irrigation','corruption','militaryPower','armyMorale','prestige','mandate','happiness','stability','techLevel'].forEach(k=>{if(e[k]!==undefined)G[k]=cl(G[k]+e[k],0,k==='tradeRoutes'?999:100);});
+  if(d.dur>0){G.activeDecrees.push(id);G.decreeTurns[id]=G.turn+d.dur;}
+  alog(`Décret : "${d.name}"`,'gd');computeDeltas();render();snotif('Décret: '+d.name,'gd');
+}
+
+// ===== RIGHT PANEL =====
+function renderResources(){
+  const df=v=>`<span class="${v>=0?'dpos':'dneg'}">${v>=0?'+':''}${Math.round(v)}</span>`;
+  document.getElementById('rvt').textContent=G.treasury.toLocaleString();
+  document.getElementById('rvf').textContent=G.food.toLocaleString();
+  document.getElementById('rvp').textContent=Math.round(G.prestige);
+  document.getElementById('rvj').textContent=Math.round(G.jade);
+  document.getElementById('rdt').innerHTML=df(G.dT)+'/an';
+  document.getElementById('rdf').innerHTML=df(G.dF)+'/an';
+  document.getElementById('rdp').innerHTML=df(0)+'/an';
+  document.getElementById('rdj').innerHTML=df(0)+'/an';
+}
+
+function renderIndicators(){
+  const bars=[
+    {l:'Stabilité',v:G.stability,c:G.stability>60?'#52b788':G.stability>35?'#f0c040':'#e74c3c'},
+    {l:'Mandat du Ciel',v:G.mandate,c:G.mandate>60?'#c9a84c':G.mandate>35?'#f0c040':'#e74c3c'},
+    {l:'Bonheur',v:G.happiness,c:'#52b788'},
+    {l:'Corruption',v:G.corruption,c:'#e74c3c'},
+    {l:'Puissance mil.',v:G.militaryPower,c:'#3498db'},
+    {l:'Irrigation',v:G.irrigation,c:'#1a7a3a'},
+    {l:'Niveau technique',v:G.techLevel,c:'#9b59b6'},
+    {l:'Intrigues de cour',v:G.courtIntrigueLevel,c:G.courtIntrigueLevel>62?'#e74c3c':'#9b59b6'},
+  ];
+  document.getElementById('indcon').innerHTML=bars.map(b=>`
+    <div class="ib"><div class="il"><span>${b.l}</span><span>${Math.round(b.v)}</span></div>
+    <div class="it"><div class="if" style="width:${cl(b.v,0,100)}%;background:${b.c}"></div></div></div>`).join('');
+}
+
+function renderStats(){
+  const rows=[
+    ['Population',G.population.toFixed(1)+'M'],['Armée',G.armySize+'k'],
+    ['Moral',G.armyMorale+'%'],['Routes comm.',G.tradeRoutes],
+    ['Guerres',G.wars.length||'—'],['Vassaux',G.nations.filter(n=>n.vassal).length],
+    ['Alliances',G.nations.filter(n=>n.ally).length],
+    ['Complots détectés',G.ministers.filter(m=>m.plotTarget&&m.suspicion>20).length||'—'],
+    ['Niveau d\'intrigues',Math.round(G.courtIntrigueLevel)+'%'],
+  ];
+  document.getElementById('statcon').innerHTML=rows.map(([l,v])=>`<div class="srow"><span>${l}</span><span class="sv">${v}</span></div>`).join('');
+}
+
+function renderEvents(){
+  const c=document.getElementById('evcon');
+  if(G.pendingEvents.length===0){c.innerHTML=`<div class="empty">Aucun événement.<br>Passez à l'année suivante.</div>`;return;}
+  c.innerHTML=G.pendingEvents.map((ev,i)=>`
+    <div class="ec ${ev.type}">
+      <div class="etl">${ev.title}</div><div class="etx">${ev.text}</div>
+      <div class="ech">${ev.choices.map((ch,j)=>`<button class="ecb" onclick="resolveEv(${i},${j})">${ch.t}<span class="cc">${ch.c}</span></button>`).join('')}</div>
+    </div>`).join('');
+}
+function resolveEv(i,j){const ev=G.pendingEvents[i];if(!ev)return;const ch=ev.choices[j];if(!ch)return;ch.e(G);G.pendingEvents.splice(i,1);computeDeltas();render();snotif('Décision prise','nt');}
+
+function renderLog(){
+  document.getElementById('logcon').innerHTML=G.log.slice(0,22).map(l=>`<div class="loge ${l.t}">An ${l.turn} — ${l.msg}</div>`).join('');
+}
+function alog(msg,t='nt'){G.log.unshift({msg,t,turn:G.turn});if(G.log.length>40)G.log.pop();}
+
+// ===== MODAL =====
+function openModal(title,body,actions){
+  document.getElementById('mt').textContent=title;
+  document.getElementById('mbp').textContent=body;
+  document.getElementById('ma').innerHTML=actions.map((a,i)=>`<button class="mab${a.d?' d':''}" id="mab${i}">${a.l}</button>`).join('');
+  actions.forEach((a,i)=>{document.getElementById('mab'+i).onclick=a.fn;});
+  document.getElementById('mo').classList.add('open');
+}
+function closeModal(){document.getElementById('mo').classList.remove('open');}
+document.getElementById('mo').addEventListener('click',e=>{if(e.target===document.getElementById('mo'))closeModal();});
+
+// ===== TABS =====
+const TABS=['events','court','map','military','economy','decrees'];
+function switchTab(name){
+  document.querySelectorAll('.tbtn').forEach((b,i)=>{if(TABS[i])b.classList.toggle('act',TABS[i]===name);});
+  document.querySelectorAll('.tcon').forEach(c=>c.classList.remove('act'));
+  const el=document.getElementById('tab-'+name);if(el)el.classList.add('act');
+  if(name==='map'){renderMap();renderNations();}
+  if(name==='court'){renderCourtTab();updBadge();}
+}
+
+// ===== NOTIF =====
+let _nt=null;
+function snotif(msg,t='nt'){
+  const el=document.getElementById('notif');el.textContent=msg;el.className=t;el.classList.add('show');
+  if(_nt)clearTimeout(_nt);_nt=setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+// ===== START =====
+function startGame(){
+  G=initState();computeDeltas();
+  const pool=EVENTS.filter(e=>e.cond(G));
+  G.pendingEvents=pool.sort(()=>rnd()-.5).slice(0,Math.min(2,pool.length)).map(e=>({...e}));
+  alog(`Le règne de ${G.emperorName} commence`,'gd');
+  document.getElementById('emnm').textContent='Emp. '+G.emperorName;
+  document.getElementById('emer').textContent=`Année 1 — ${G.eraName}`;
+  document.getElementById('tbt').textContent=`Imp. ${G.emperorName} — ${G.eraName}`;
+  document.getElementById('splash').style.opacity='0';
+  setTimeout(()=>{document.getElementById('splash').style.display='none';document.getElementById('game').style.display='block';},1000);
+  render();updBadge();
+}
+function resetGame(){document.getElementById('go').classList.remove('open');startGame();}
+</script>
+</body>
+</html>
